@@ -182,7 +182,7 @@ Serwer CVS - pliki nservera.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/sysconfig/rc-inetd,%{_cvsroot}}
+install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_cvsroot}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -256,7 +256,7 @@ fi
 if [ "$1" = 1 ]; then
 	echo "Initializing repository..."
 	%{_bindir}/cvs -d :local:%{_cvsroot} init
-	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
+	chown -R cvsadmin:cvsadmin %{_cvsroot}/CVSROOT
 fi
 
 %postun common
