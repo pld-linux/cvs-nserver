@@ -5,7 +5,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.4
-Release:	1
+Release:	2
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://unc.dl.sourceforge.net/sourceforge/cvs-nserver/%{name}-%{version}.tar.gz
