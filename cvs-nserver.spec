@@ -5,7 +5,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.4
-Release:	2
+Release:	3
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://unc.dl.sourceforge.net/sourceforge/cvs-nserver/%{name}-%{version}.tar.gz
@@ -91,10 +91,10 @@ Obsoletes:	cvs-npclient
 Obsoletes:	cvs
 
 %description -n cvs-nserver-client
-CVS client
+CVS client.
 
 %description -n cvs-nserver-client -l pl
-Klient CVS 
+Klient CVS.
 
 %package -n cvs-nserver-common
 Summary:	Concurrent Versions System - common files.
@@ -103,12 +103,20 @@ Group:		Development/Version Control
 Requires:	cvs-nserver-client
 Obsoletes:	cvs-nserver
 Obsoletes:	cvs
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(pre):	cvs-nserver-client
+Requires(pre):	fileutils
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 
 %description -n cvs-nserver-common
 CVS - common server files.
 
 %description -n cvs-nserver-common -l pl
-Wspólne pliki serwerów CVS
+Wspólne pliki serwerów CVS.
 
 %package -n cvs-nserver-pserver
 Summary:	Concurrent Versions System - pserver
@@ -116,12 +124,13 @@ Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
 Requires:	cvs-nserver-common
 Obsoletes:	cvs-npserver
+PreReq:		rc-inetd
 
 %description -n cvs-nserver-pserver
 CVS server - pserver files.
 
 %description -n cvs-nserver-pserver -l pl
-Serwer CVS - pliki pservera
+Serwer CVS - pliki pservera.
 
 %package -n cvs-nserver-nserver
 Summary:	Concurrent Versions System - nserver
@@ -129,6 +138,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Group:		Development/Version Control
 Requires:	cvs-nserver-common
 Obsoletes:	cvs-nserver
+PreReq:		rc-inetd
 
 %description -n cvs-nserver-nserver
 CVS server - nserver files.
@@ -181,8 +191,6 @@ EOF
 mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 	$RPM_BUILD_ROOT%{_bindir}
 
-gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO FAQ FAQ.nserver
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -195,55 +203,55 @@ rm -rf $RPM_BUILD_ROOT
 %pre -n cvs-nserver-common
 if [ -n "`getgid cvs`" ]; then
 	if [ "`getgid cvs`" != "52" ]; then
-		echo "Warning: group cvs haven't gid=52. Correct this before installing cvs-nserver" 1>&2
+		echo "Error: group cvs doesn't have gid=52. Correct this before installing cvs-nserver." 1>&2
 		exit 1
 	fi
 else
-	echo "Making group cvs GID=52"
+	echo "Adding group cvs GID=52."
 	/usr/sbin/groupadd -g 52 -r -f cvs
 fi
 if [ -n "`getgid cvsadmin`" ]; then
 	if [ "`getgid cvsadmin`" != "53" ]; then
-		echo "Warning: group cvsadmin haven't gid=53. Correct this before installing cvs-nserver" 1>&2
+		echo "Error: group cvsadmin doesn't have gid=53. Correct this before installing cvs-nserver." 1>&2
 		exit 1
 	fi
 else
-	echo "Making group cvsadmin GID=53"
+	echo "Adding group cvsadmin GID=53."
 	/usr/sbin/groupadd -g 53 -r -f cvsadmin
 fi
 if [ -n "`id -u cvs 2>/dev/null`" ]; then
 	if [ "`id -u cvs`" != "52" ]; then
-		echo "Warning: user cvs haven't uid=52. Correct this before installing cvs-nserver" 1>&2
+		echo "Error: user cvs doesn't have uid=52. Correct this before installing cvs-nserver." 1>&2
 		exit 1
 	fi
 else
-	echo "Making user cvs UID=52"
+	echo "Adding user cvs UID=52."
 	/usr/sbin/useradd -u 52 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvs cvs 1>&2
 fi
 if [ -n "`id -u cvsadmin 2>/dev/null`" ]; then
 	if [ "`id -u cvsadmin`" != "53" ]; then
-		echo "Warning: user cvsadmin haven't uid=53. Correct this before installing cvs-nserver" 1>&2
+		echo "Error: user cvsadmin doesn't have uid=53. Correct this before installing cvs-nserver." 1>&2
 		exit 1
 	fi
 else
-	echo "Making user cvsadmin UID=53"
+	echo "Adding user cvsadmin UID=53."
 	/usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
 fi
 if [ "$1" = 1 ]; then
-	echo "Initialise repository"
+	echo "Initializing repository..."
 	%{_bindir}/cvs -d :local:%{_cvsroot} init
 	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
 fi
 
 %postun -n cvs-nserver-common
 if [ "$1" = "0" ]; then
-	echo "Removing group cvs GID=52"
+	echo "Removing user cvs."
 	/usr/sbin/userdel cvs
-	echo "Removing group cvsadmin GID=53"
+	echo "Removing user cvsadmin."
 	/usr/sbin/userdel cvsadmin
-	echo "Removing user cvs UID=52"
+	echo "Removing group cvs."
 	/usr/sbin/groupdel cvs
-	echo "Removing user cvsadmin UID=53"
+	echo "Removing group cvsadmin."
 	/usr/sbin/groupdel cvsadmin
 fi
 
@@ -269,7 +277,7 @@ fi
 
 %files -n cvs-nserver-client
 %defattr(644,root,root,755)
-%doc {AUTHORS,BUGS,NEWS,PROJECTS,TODO,FAQ}.gz
+%doc AUTHORS BUGS NEWS PROJECTS TODO FAQ
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
 %{_infodir}/cvs*
@@ -294,6 +302,6 @@ fi
 %files -n cvs-nserver-nserver
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs-nserver*
-%doc NEWS.nserver.gz FAQ.nserver.gz
+%doc NEWS.nserver FAQ.nserver
 /etc/sysconfig/rc-inetd/cvs-nserver
 %{_mandir}/man8/cvs-nserver.8*
