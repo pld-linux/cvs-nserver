@@ -9,7 +9,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	10.1
+Release:	10.2
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
@@ -40,7 +40,7 @@ BuildRequires:	texinfo
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_cvsroot	/srv/cvsroot
+%define		_cvsroot	/var/lib/cvs
 
 %description
 CVS is a version control system, which allows you to keep old versions
@@ -105,9 +105,9 @@ saðlar.
 Summary:	Concurrent Versions System - client
 Summary(pl):	Concurrent Versions System - klient
 Group:		Development/Version Control
-Obsoletes:	cvs-npclient
-Obsoletes:	cvs
 Provides:	cvs = %{version}
+Obsoletes:	cvs
+Obsoletes:	cvs-npclient
 
 %description client
 CVS client.
@@ -127,7 +127,7 @@ Requires(pre):	cvs-nserver-client
 Requires(pre):	fileutils
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
-Requires:	cvs-nserver-client
+Requires:	%{name}-client = %{version}-%{release}
 Obsoletes:	cvs-nserver
 
 %description common
@@ -141,7 +141,7 @@ Summary:	Concurrent Versions System - pserver
 Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
 PreReq:		rc-inetd
-Requires:	cvs-nserver-common
+Requires:	%{name}-common = %{version}-%{release}
 Obsoletes:	cvs-npserver
 Obsoletes:	cvs-pserver
 
@@ -156,7 +156,7 @@ Summary:	Concurrent Versions System - nserver
 Summary(pl):	Concurrent Versions System - nserver
 Group:		Development/Version Control
 PreReq:		rc-inetd
-Requires:	cvs-nserver-common
+Requires:	%{name}-common = %{version}-%{release}
 Obsoletes:	cvs-nserver
 
 %description nserver
@@ -234,7 +234,10 @@ EOF
 cat << EOF >$RPM_BUILD_ROOT/etc/sysconfig/cvs
 # In this file you can specify additional repositories (separated with space)
 # or just set different location.
+# Default is "%{_cvsroot}".
 #REPOSITORY="%{_cvsroot}"
+# According to FHS 2.3 you can use some subdirectory in /srv, e.g.:
+#REPOSITORY="/srv/cvs"
 EOF
 
 mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
@@ -336,7 +339,7 @@ fi
 
 %files common
 %defattr(644,root,root,755)
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/cvs
+%attr(640,root,cvs) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/cvs
 %attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
 %attr(755,root,root) %{_bindir}/rcs2log
