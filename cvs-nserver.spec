@@ -1,10 +1,10 @@
 Summary: Concurrent Versions System
 Name: cvs-nserver
-Version: 1.10.8.1
+Version: @VERSION@
 Release: 1
 Copyright: GPL
 Group: Development/Version Control
-Source: http://alexm.here.ru/cvs-nserver/download/cvs-nserver-1.10.8.1.tar.gz
+Source: http://alexm.here.ru/cvs-nserver/download/cvs-nserver-@VERSION@.tar.gz
 Packager: Alexey Mahotkin <alexm@hsys.msk.ru>
 Prefix: /usr
 BuildRoot: /var/tmp/cvs-nserver
@@ -30,6 +30,7 @@ make CFLAGS="$RPM_OPT_FLAGS" LDFLAGS=-s
 %install
 make installdirs
 make PAMDIR=$RPM_BUILD_ROOT/etc/pam.d install
+make install-setuid
 rm -f $RPM_BUILD_ROOT/usr/info/cvs*
 make install-info
 gzip -9nf $RPM_BUILD_ROOT/usr/info/cvs*
@@ -40,6 +41,8 @@ gzip -9nf $RPM_BUILD_ROOT/usr/info/cvs*
 %doc INSTALL MINOR-BUGS NEWS PROJECTS README TESTS TODO
 /usr/bin/cvs
 /usr/bin/cvschkpw
+%attr(4750, cvsadmin, cvs)
+/usr/bin/cvspasswd
 /usr/bin/cvs-pserver
 /usr/bin/cvs-nserver
 /usr/bin/checkpassword
