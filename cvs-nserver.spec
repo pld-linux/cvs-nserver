@@ -8,7 +8,7 @@ Version:	1.11.1.52
 Release:	1
 License:	GPL
 Group:		Development/Version Control
-Source0:	ftp://ftp.sourceforge.net/pub/sourceforge/cvs-nserver/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Source1:	%{name}.inetd
 Source2:	cvs-pserver.inetd
 Patch0:		%{name}-cvspasswd.patch
@@ -91,6 +91,7 @@ Summary(pl):	Concurrent Versions System - klient
 Group:		Development/Version Control
 Obsoletes:	cvs-npclient
 Obsoletes:	cvs
+Provides:	cvs
 
 %description client
 CVS client.
