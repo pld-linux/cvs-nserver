@@ -117,7 +117,7 @@ Serwer - pserver.
 
 %build
 aclocal
-autoconf
+%{__autoconf}
 automake -a -c
 %configure \
 	--enable-encryption \
