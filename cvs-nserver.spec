@@ -9,7 +9,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	6
+Release:	7
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
@@ -189,7 +189,7 @@ Serwer CVS - pliki nservera.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_cvsroot}}
+install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_cvsroot},/var/lock/cvs}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -335,6 +335,7 @@ fi
 %{_datadir}/cvs-nserver/contrib/*
 %attr(770,cvsadmin,cvs) %dir %{_cvsroot}
 %{_mandir}/man8/cvs-server.8*
+%attr(770,cvsadmin,cvs) %dir /var/lock/cvs
 
 %files pserver
 %defattr(644,root,root,755)
