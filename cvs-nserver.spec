@@ -127,9 +127,13 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	cvs-nserver-client
 Requires(pre):	fileutils
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires:	%{name}-client = %{version}-%{release}
+Provides:	group(cvs)
+Provides:	group(cvsadmin)
+Provides:	user(cvs)
+Provides:	user(cvsadmin)
 Obsoletes:	cvs-nserver
 
 %description common
@@ -301,14 +305,10 @@ fi
 
 %postun common
 if [ "$1" = "0" ]; then
-	echo "Removing user cvs."
-	/usr/sbin/userdel cvs
-	echo "Removing user cvsadmin."
-	/usr/sbin/userdel cvsadmin
-	echo "Removing group cvs."
-	/usr/sbin/groupdel cvs
-	echo "Removing group cvsadmin."
-	/usr/sbin/groupdel cvsadmin
+	%userremove cvs
+	%userremove cvsadmin
+	%groupremove cvs
+	%groupremove cvsadmin
 fi
 
 %post pserver
