@@ -241,9 +241,13 @@ fi
 
 %postun -n cvs-nserver-common
 if [ "$1" = "0" ]; then
+	echo "Removing group cvs GID=52"
 	/usr/sbin/userdel cvs
+	echo "Removing group cvsadmin GID=53"
 	/usr/sbin/userdel cvsadmin
+	echo "Removing user cvs UID=52"
 	/usr/sbin/groupdel cvs
+	echo "Removing user cvsadmin UID=53"
 	/usr/sbin/groupdel cvsadmin
 fi
 
@@ -268,7 +272,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc *.gz
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
-%attr(755,root,root) %{_bindir}/rcs2log
 %{_infodir}/cvs*
 %{_mandir}/man[15]/cvs.*
 %{_mandir}/man8/cvsbug.8*
@@ -278,7 +281,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
 %attr(755,root,root) %{_bindir}/rcs2log
-%dir %{_datadir}/cvs-nserver/*
+%dir %{_datadir}/cvs-nserver/contrib/*
 %{_mandir}/man8/cvs-server.8*
 %attr(770,cvsadmin,cvs) %dir %{_cvsroot}
 
