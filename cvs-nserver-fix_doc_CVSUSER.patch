@@ -1,0 +1,15 @@
+--- cvs-nserver-1.11.1.52/doc/cvs.texinfo~	Wed Mar  5 19:05:35 2003
++++ cvs-nserver-1.11.1.52/doc/cvs.texinfo	Wed Mar  5 19:05:35 2003
+@@ -12893,10 +12893,10 @@
+ @c FIXME: should document USER, LOGNAME, and whatever else is
+ @c available both in internal variables and environment variables.
+ 
+-@item CVS_USER
++@item CVSUSER
+ The @sc{cvs}-specific username provided by the user, if it
+ can be provided (currently just for the pserver access
+-method), and to the empty string otherwise.  (CVS_USER
++method), and to the empty string otherwise.  (CVSUSER
+ and USER may differ when @file{$CVSROOT/CVSROOT/passwd}
+ is used to map cvs usernames to system usernames.)
+ @end table
