@@ -1,0 +1,34 @@
+diff -urN cvs-nserver-1.11.1.52.org/src/server.c cvs-nserver-1.11.1.52/src/server.c
+--- cvs-nserver-1.11.1.52.org/src/server.c	2004-05-23 02:51:33.266858272 +0200
++++ cvs-nserver-1.11.1.52/src/server.c	2004-05-23 03:00:47.643580200 +0200
+@@ -965,9 +965,6 @@
+ 	return;
+     }
+ 
+-    if (dir_name != NULL)
+-	free (dir_name);
+-
+     dir_len = strlen (dir);
+ 
+     /* Check for a trailing '/'.  This is not ISDIRSEP because \ in the
+@@ -983,6 +980,9 @@
+ 	return;
+     }
+ 
++    if (dir_name != NULL)
++	free (dir_name);
++    
+     dir_name = malloc (strlen (server_temp_dir) + dir_len + 40);
+     if (dir_name == NULL)
+     {
+@@ -4589,8 +4589,8 @@
+   REQ_LINE("Max-dotdot", serve_max_dotdot, 0),
+   REQ_LINE("Static-directory", serve_static_directory, 0),
+   REQ_LINE("Sticky", serve_sticky, 0),
+-  REQ_LINE("Checkin-prog", serve_checkin_prog, 0),
+-  REQ_LINE("Update-prog", serve_update_prog, 0),
++  REQ_LINE("Checkin-prog", serve_noop, 0),
++  REQ_LINE("Update-prog", serve_noop, 0),
+   REQ_LINE("Entry", serve_entry, RQ_ESSENTIAL),
+   REQ_LINE("Kopt", serve_kopt, 0),
+   REQ_LINE("Checkin-time", serve_checkin_time, 0),
