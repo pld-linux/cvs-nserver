@@ -21,8 +21,6 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-Requires:	cvs-nserver-client
-Obsoletes:	cvs
 
 %define		_cvsroot	/home/cvsroot
 
@@ -89,6 +87,8 @@ saðlar.
 Summary:	Concurrent Versions System - client
 Summary(pl):	Concurrent Versions System - klient
 Group:		Development/Version Control
+Obsoletes:	cvs-npclient
+Obsoletes:	cvs
 
 %description -n cvs-nserver-client
 CVS client
@@ -100,6 +100,9 @@ Klient CVS
 Summary:	Concurrent Versions System - common files.
 Summary(pl):	Concurrent Versions System - wspólne pliki.
 Group:		Development/Version Control
+Requires:	cvs-nserver-client
+Obsoletes:	cvs-nserver
+Obsoletes:	cvs
 
 %description -n cvs-nserver-common
 CVS - common server files.
@@ -112,6 +115,7 @@ Summary:	Concurrent Versions System - pserver
 Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
 Requires:	cvs-nserver-common
+Obsoletes:	cvs-npserver
 
 %description -n cvs-nserver-pserver
 CVS server - pserver files.
@@ -124,6 +128,7 @@ Summary:	Concurrent Versions System - nserver
 Summary(pl):	Concurrent Versions System - nserver
 Group:		Development/Version Control
 Requires:	cvs-nserver-common
+Obsoletes:	cvs-nserver
 
 %description -n cvs-nserver-nserver
 CVS server - nserver files.
