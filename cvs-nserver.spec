@@ -154,9 +154,9 @@ Serwer CVS - pliki nservera.
 %patch5 -p1
 
 %build
-aclocal
+%{__aclocal}
 %{__autoconf}
-automake -a -c
+%{__automake}
 %configure \
 	--enable-encryption \
 	--enable-client \
