@@ -23,7 +23,7 @@ Patch8:		%{name}-initgroups-rootonly.patch
 Patch9:		%{name}-zlibfix.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	openssl-devel >= 0.9.6i
+BuildRequires:	openssl-devel >= 0.9.6m
 BuildRequires:	texinfo
 BuildRequires:	zlib-devel
 Requires:	openssl >= 0.9.6i
