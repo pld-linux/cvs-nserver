@@ -57,3 +57,54 @@
  
      /* Safety first and last, Scouts. */
      if (isfile (passfile))
+--- cvs-1.11.1p1.org/src/cvsrc.c	Sun Dec 22 14:18:41 2002
++++ cvs-1.11.1p1/src/cvsrc.c	Sun Dec 22 14:30:43 2002
+@@ -9,13 +9,14 @@
+  */
+ 
+ 
++#include <sys/stat.h>
+ #include "cvs.h"
+ #include "getline.h"
+ 
+ /* this file is to be found in the user's home directory */
+ 
+ #ifndef	CVSRC_FILENAME
+-#define	CVSRC_FILENAME	".cvsrc"
++#define	CVSRC_FILENAME	"cvsrc"
+ #endif
+ char cvsrc[] = CVSRC_FILENAME;
+ 
+@@ -36,6 +37,9 @@
+     char *homeinit;
+     FILE *cvsrcfile;
+ 
++    char *path;
++    struct stat st;
++    
+     char *line;
+     int line_length;
+     size_t line_chars_allocated;
+@@ -73,10 +77,22 @@
+     if (!homedir)
+ 	return;
+ 
++    if ( (path=getenv("CONFIG_DIR")) && path[0] ) {
++	path=(char*) malloc(strlen(homedir)+strlen(getenv("CONFIG_DIR"))+2);
++	sprintf(path, "%s/%s", homedir, getenv("CONFIG_DIR"));
++    } else path=(char *) NULL;
++    if ( path && stat(path,&st)!=-1 && S_ISDIR(st.st_mode) ) {
++	homeinit = (char *) xmalloc (strlen (path) + strlen (cvsrc) + 3);
++	sprintf (homeinit, "%s/%s", path, cvsrc);
++    }
++    else {
+     homeinit = (char *) xmalloc (strlen (homedir) + strlen (cvsrc) + 10);
+     strcpy (homeinit, homedir);
+     strcat (homeinit, "/");
+     strcat (homeinit, cvsrc);
++    } /* else */
++    if (path)
++	free(path);
+ 
+     /* if it can't be read, there's no point to continuing */
+ 
