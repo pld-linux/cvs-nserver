@@ -9,6 +9,7 @@ Release:	4
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+# Source0-md5: 357fb5f37cc556977dad79175e9c2d97
 Source1:	%{name}.inetd
 Source2:	cvs-pserver.inetd
 Patch0:		%{name}-cvspasswd.patch
