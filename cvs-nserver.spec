@@ -262,26 +262,26 @@ rm -rf $RPM_BUILD_ROOT
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %pre common
-if [ -n "`getgid cvs`" ]; then
-	if [ "`getgid cvs`" != "52" ]; then
+if [ -n "`/usr/bin/getgid cvs`" ]; then
+	if [ "`/usr/bin/getgid cvs`" != "52" ]; then
 		echo "Error: group cvs doesn't have gid=52. Correct this before installing cvs-nserver." 1>&2
 		exit 1
 	fi
 else
 	echo "Adding group cvs GID=52."
-	/usr/sbin/groupadd -g 52 -r -f cvs
+	/usr/sbin/groupadd -g 52 -r cvs
 fi
-if [ -n "`getgid cvsadmin`" ]; then
-	if [ "`getgid cvsadmin`" != "53" ]; then
+if [ -n "`/usr/bin/getgid cvsadmin`" ]; then
+	if [ "`/usr/bin/getgid cvsadmin`" != "53" ]; then
 		echo "Error: group cvsadmin doesn't have gid=53. Correct this before installing cvs-nserver." 1>&2
 		exit 1
 	fi
 else
 	echo "Adding group cvsadmin GID=53."
-	/usr/sbin/groupadd -g 53 -r -f cvsadmin
+	/usr/sbin/groupadd -g 53 -r cvsadmin
 fi
-if [ -n "`id -u cvs 2>/dev/null`" ]; then
-	if [ "`id -u cvs`" != "52" ]; then
+if [ -n "`/bin/id -u cvs 2>/dev/null`" ]; then
+	if [ "`/bin/id -u cvs`" != "52" ]; then
 		echo "Error: user cvs doesn't have uid=52. Correct this before installing cvs-nserver." 1>&2
 		exit 1
 	fi
