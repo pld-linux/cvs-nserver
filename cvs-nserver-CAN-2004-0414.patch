@@ -1,0 +1,91 @@
+diff -urN cvs-nserver-1.11.1.52.org/src/server.c cvs-nserver-1.11.1.52/src/server.c
+--- cvs-nserver-1.11.1.52.org/src/server.c	2004-06-11 15:06:44.381011584 +0200
++++ cvs-nserver-1.11.1.52/src/server.c	2004-06-11 15:11:06.136218744 +0200
+@@ -1619,8 +1619,7 @@
+     char *cp;
+     char *timefield;
+ 
+-    if (error_pending ())
+-	return;
++    if (error_pending ()) return;
+ 
+     if (outside_dir (arg))
+ 	return;
+@@ -1634,7 +1633,16 @@
+ 	    && strlen (arg) == cp - name
+ 	    && strncmp (arg, name, cp - name) == 0)
+ 	{
+-	    timefield = strchr (cp + 1, '/') + 1;
++	    if (!(timefield = strchr (cp + 1, '/')) || *++timefield == '\0')
++	    {
++		/* We didn't find the record separator or it is followed by
++		 * the end of the string, so just exit.
++		 */
++		if (alloc_pending (80))
++		    sprintf (pending_error_text,
++		             "E Malformed Entry encountered.");
++		return;
++	    }
+ 	    /* If the time field is not currently empty, then one of
+ 	     * serve_modified, serve_is_modified, & serve_unchanged were
+ 	     * already called for this file.  We would like to ignore the
+@@ -1681,8 +1689,7 @@
+     /* Have we found this file in "entries" yet.  */
+     int found;
+ 
+-    if (error_pending ())
+-	return;
++    if (error_pending ()) return;
+ 
+     if (outside_dir (arg))
+ 	return;
+@@ -1697,7 +1704,16 @@
+ 	    && strlen (arg) == cp - name
+ 	    && strncmp (arg, name, cp - name) == 0)
+ 	{
+-	    timefield = strchr (cp + 1, '/') + 1;
++	    if (!(timefield = strchr (cp + 1, '/')) || *++timefield == '\0')
++	    {
++		/* We didn't find the record separator or it is followed by
++		 * the end of the string, so just exit.
++		 */
++		if (alloc_pending (80))
++		    sprintf (pending_error_text,
++		             "E Malformed Entry encountered.");
++		return;
++	    }
+ 	    /* If the time field is not currently empty, then one of
+ 	     * serve_modified, serve_is_modified, & serve_unchanged were
+ 	     * already called for this file.  We would like to ignore the
+@@ -1782,8 +1798,30 @@
+ {
+     struct an_entry *p;
+     char *cp;
++    int i = 0;
+     if (error_pending()) return;
+-    p = (struct an_entry *) malloc (sizeof (struct an_entry));
++
++    /* Verify that the entry is well-formed.  This can avoid problems later.
++     * At the moment we only check that the Entry contains five slashes in
++     * approximately the correct locations since some of the code makes
++     * assumptions about this.
++     */
++    
++    cp = arg;
++    if (*cp == 'D') cp++;
++    while (i++ < 5)
++    {
++	if (!cp || *cp != '/')
++	{
++	    if (alloc_pending (80))
++		sprintf (pending_error_text,
++			"E protocol error: Malformed Entry");
++	    return;
++	}
++	cp = strchr (cp + 1, '/');
++    }
++    
++    p = (struct an_entry *) xmalloc (sizeof (struct an_entry));
+     if (p == NULL)
+     {
+ 	pending_error = ENOMEM;
