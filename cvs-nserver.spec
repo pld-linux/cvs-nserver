@@ -91,7 +91,7 @@ Summary(pl):	Concurrent Versions System - klient
 Group:		Development/Version Control
 Obsoletes:	cvs-npclient
 Obsoletes:	cvs
-Provides:	cvs
+Provides:	cvs = %{version}
 
 %description client
 CVS client.
