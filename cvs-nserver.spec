@@ -4,7 +4,7 @@ Summary(fr):	Un système pour maintenir à jour des fichiers
 Summary(pl):	Concurrent Versions System
 Summary(tr):	Sürüm denetim sistemi
 Name:		cvs-nserver
-Version:	1.11.1.2
+Version:	1.11.1.3
 Release:	1
 License:	GPL
 Group:		Development/Version Control
@@ -146,7 +146,8 @@ autoconf
 	--enable-encryption \
 	--enable-client \
 	--enable-server \
-	--enable-setuid
+	--enable-setuid \
+	--without-gssapi
 %{__make}
 
 %install
