@@ -206,13 +206,13 @@ mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -n cvs-nserver-client
+%post client
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
-%postun -n cvs-nserver-client
+%postun client
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
-%pre -n cvs-nserver-common
+%pre common
 if [ -n "`getgid cvs`" ]; then
 	if [ "`getgid cvs`" != "52" ]; then
 		echo "Error: group cvs doesn't have gid=52. Correct this before installing cvs-nserver." 1>&2
@@ -255,7 +255,7 @@ if [ "$1" = 1 ]; then
 	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
 fi
 
-%postun -n cvs-nserver-common
+%postun common
 if [ "$1" = "0" ]; then
 	echo "Removing user cvs."
 	/usr/sbin/userdel cvs
@@ -267,27 +267,27 @@ if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel cvsadmin
 fi
 
-%post -n cvs-nserver-pserver
+%post pserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%postun -n cvs-nserver-pserver
+%postun pserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%post -n cvs-nserver-nserver
+%post nserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%postun -n cvs-nserver-nserver
+%postun nserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%files -n cvs-nserver-client
+%files client
 %defattr(644,root,root,755)
 %doc AUTHORS BUGS ChangeLog FAQ FAQ.nserver NEWS NEWS.nserver PROJECTS
 %doc README README.checkpassword TODO
@@ -297,7 +297,7 @@ fi
 %{_mandir}/man[15]/cvs.*
 %{_mandir}/man8/cvsbug.8*
 
-%files -n cvs-nserver-common
+%files common
 %defattr(644,root,root,755)
 %attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
@@ -306,13 +306,13 @@ fi
 %attr(770,cvsadmin,cvs) %dir %{_cvsroot}
 %{_mandir}/man8/cvs-server.8*
 
-%files -n cvs-nserver-pserver
+%files pserver
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs-pserver*
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/cvs-pserver
 %{_mandir}/man8/cvs-pserver.8*
 
-%files -n cvs-nserver-nserver
+%files nserver
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs-nserver*
 %doc NEWS.nserver FAQ.nserver
