@@ -158,7 +158,7 @@ gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO FAQ FAQ.nserver
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%pre
 if [ -n "`getgid cvs`" ]; then
 	if [ "`getgid cvs`" != "52" ]; then
 		echo "Warning: group cvs haven't gid=52. Correct this before installing cvs-nserver" 1>&2
