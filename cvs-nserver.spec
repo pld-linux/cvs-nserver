@@ -200,7 +200,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/cvs-pserver
 cat << EOF >$RPM_BUILD_ROOT%{_bindir}/cvs-pserver-script
 #!/bin/sh
 REPOSITORY="%{_cvsroot}"
-if [ -f /etc/sysconfig/cvsroot ]; then
+if [ -f /etc/sysconfig/cvs ]; then
 	. /etc/sysconfig/cvs
 fi
 
@@ -212,7 +212,7 @@ EOF
 cat << EOF >$RPM_BUILD_ROOT%{_bindir}/cvs-nserver-script
 #!/bin/sh
 REPOSITORY="%{_cvsroot}"
-if [ -f /etc/sysconfig/cvsroot ]; then
+if [ -f /etc/sysconfig/cvs ]; then
 	. /etc/sysconfig/cvs
 fi
 
