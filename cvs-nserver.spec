@@ -172,7 +172,7 @@ exec %{_bindir}/cvs-nserver %{_cvsroot} -- \
 %{_bindir}/cvschkpw %{_bindir}/cvs nserver
 EOF
 
-mv	$RPM_BUILD_ROOT%{_datadir}cvs-nserver/contrib/rcs2log \
+mv	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 	$RPM_BUILD_ROOT%{_bindir}
 
 gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO
