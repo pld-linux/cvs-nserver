@@ -23,12 +23,13 @@ Patch8:		%{name}-initgroups-rootonly.patch
 Patch9:		%{name}-zlibfix.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	openssl-devel >= 0.9.6i
 BuildRequires:	texinfo
 BuildRequires:	zlib-devel
+Requires:	openssl >= 0.9.6i
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_cvsroot	/home/services/cvsroot
+%define		_cvsroot	/home/cvsroot
 
 %description
 CVS is a version control system, which allows you to keep old versions
@@ -95,6 +96,7 @@ Summary(pl):	Concurrent Versions System - klient
 Group:		Development/Version Control
 Obsoletes:	cvs-npclient
 Obsoletes:	cvs
+Provides:	/usr/bin/cvs
 Provides:	cvs = %{version}
 
 %description client
