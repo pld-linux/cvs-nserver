@@ -10,6 +10,7 @@ License:	GPL
 Group:		Development/Version Control
 Group(pl):	Programowanie/Zarz±dzanie wersjami
 Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
+Patch0:		cvs-nserver-PAM_fix.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -73,9 +74,9 @@ saðlar.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
-LDFLAGS="-s"; export LDFLAGS
 %configure \
 	--enable-pam
 %{__make}
@@ -107,11 +108,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cvsbug
 %attr(755,root,root) %{_bindir}/rcs2log
 /etc/pam.d/cvspserver
-%{_mandir}/man1/cvs.1
-%{_mandir}/man5/cvs.5
-%{_mandir}/man8/cvsbug.8
-%{_mandir}/man8/cvs-nserver.8
-%{_mandir}/man8/cvs-pserver.8
-%{_mandir}/man8/cvs-server.8
+%{_mandir}/man1/cvs.1*
+%{_mandir}/man5/cvs.5*
+%{_mandir}/man8/cvsbug.8*
+%{_mandir}/man8/cvs-nserver.8*
+%{_mandir}/man8/cvs-pserver.8*
+%{_mandir}/man8/cvs-server.8*
 %{_infodir}/cvs*
 %{_libdir}/cvs
