@@ -8,8 +8,6 @@ Version:	1.11.1.3
 Release:	3
 License:	GPL
 Group:		Development/Version Control
-Group(de):	Entwicklung/Versionkontrolle
-Group(pl):	Programowanie/Zarz±dzanie wersjami
 Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
 Source1:	%{name}.inetd
 Source2:	cvs-pserver.inetd
@@ -86,8 +84,6 @@ saðlar.
 Summary:	Concurrent Versions System - common
 Summary(pl):	Concurrent Versions System - wspólne
 Group:		Development/Version Control
-Group(de):	Entwicklung/Versionkontrolle
-Group(pl):	Programowanie/Zarz±dzanie wersjami
 
 %description -n cvs-nclient
 Client and some common files.
@@ -99,8 +95,6 @@ Klient CVS i trochê wspólnych plików.
 Summary:	Concurrent Versions System - pserver
 Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
-Group(de):	Entwicklung/Versionkontrolle
-Group(pl):	Programowanie/Zarz±dzanie wersjami
 Requires:	cvs-nserver-common
 Obsoletes:	cvs
 Obsoletes:	cvs-nserver
