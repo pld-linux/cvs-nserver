@@ -9,7 +9,7 @@ Release:	4
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5: 357fb5f37cc556977dad79175e9c2d97
+# Source0-md5:	357fb5f37cc556977dad79175e9c2d97
 Source1:	%{name}.inetd
 Source2:	cvs-pserver.inetd
 Patch0:		%{name}-cvspasswd.patch
@@ -108,12 +108,12 @@ Klient CVS.
 Summary:	Concurrent Versions System - common files
 Summary(pl):	Concurrent Versions System - wspólne pliki
 Group:		Development/Version Control
-Requires(pre): /usr/bin/getgid
-Requires(pre): /bin/id
-Requires(pre): /usr/sbin/groupadd
-Requires(pre): /usr/sbin/useradd
-Requires(postun):      /usr/sbin/userdel
-Requires(postun):      /usr/sbin/groupdel
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 Requires(pre):	cvs-nserver-client
 Requires(pre):	fileutils
 Requires:	cvs-nserver-client
@@ -218,40 +218,40 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre common
 if [ -n "`getgid cvs`" ]; then
-       if [ "`getgid cvs`" != "52" ]; then
-               echo "Error: group cvs doesn't have gid=52. Correct this before installing cvs-nserver." 1>&2
-               exit 1
-       fi
+	if [ "`getgid cvs`" != "52" ]; then
+		echo "Error: group cvs doesn't have gid=52. Correct this before installing cvs-nserver." 1>&2
+		exit 1
+	fi
 else
-       echo "Adding group cvs GID=52."
-       /usr/sbin/groupadd -g 52 -r -f cvs
+	echo "Adding group cvs GID=52."
+	/usr/sbin/groupadd -g 52 -r -f cvs
 fi
 if [ -n "`getgid cvsadmin`" ]; then
-       if [ "`getgid cvsadmin`" != "53" ]; then
-               echo "Error: group cvsadmin doesn't have gid=53. Correct this before installing cvs-nserver." 1>&2
-               exit 1
-       fi
+	if [ "`getgid cvsadmin`" != "53" ]; then
+		echo "Error: group cvsadmin doesn't have gid=53. Correct this before installing cvs-nserver." 1>&2
+		exit 1
+	fi
 else
-       echo "Adding group cvsadmin GID=53."
-       /usr/sbin/groupadd -g 53 -r -f cvsadmin
+	echo "Adding group cvsadmin GID=53."
+	/usr/sbin/groupadd -g 53 -r -f cvsadmin
 fi
 if [ -n "`id -u cvs 2>/dev/null`" ]; then
-       if [ "`id -u cvs`" != "52" ]; then
-               echo "Error: user cvs doesn't have uid=52. Correct this before installing cvs-nserver." 1>&2
-               exit 1
-       fi
+	if [ "`id -u cvs`" != "52" ]; then
+		echo "Error: user cvs doesn't have uid=52. Correct this before installing cvs-nserver." 1>&2
+		exit 1
+	fi
 else
-       echo "Adding user cvs UID=52."
-       /usr/sbin/useradd -u 52 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvs cvs 1>&2
+	echo "Adding user cvs UID=52."
+	/usr/sbin/useradd -u 52 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvs cvs 1>&2
 fi
 if [ -n "`id -u cvsadmin 2>/dev/null`" ]; then
-       if [ "`id -u cvsadmin`" != "53" ]; then
-               echo "Error: user cvsadmin doesn't have uid=53. Correct this before installing cvs-nserver." 1>&2
-               exit 1
-       fi
+	if [ "`id -u cvsadmin`" != "53" ]; then
+		echo "Error: user cvsadmin doesn't have uid=53. Correct this before installing cvs-nserver." 1>&2
+		exit 1
+	fi
 else
-       echo "Adding user cvsadmin UID=53."
-       /usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
+	echo "Adding user cvsadmin UID=53."
+	/usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
 fi
 if [ "$1" = 1 ]; then
 	echo "Initializing repository..."
@@ -261,34 +261,34 @@ fi
 
 %postun common
 if [ "$1" = "0" ]; then
-       echo "Removing user cvs."
-       /usr/sbin/userdel cvs
-       echo "Removing user cvsadmin."
-       /usr/sbin/userdel cvsadmin
-       echo "Removing group cvs."
-       /usr/sbin/groupdel cvs
-       echo "Removing group cvsadmin."
-       /usr/sbin/groupdel cvsadmin
+	echo "Removing user cvs."
+	/usr/sbin/userdel cvs
+	echo "Removing user cvsadmin."
+	/usr/sbin/userdel cvsadmin
+	echo "Removing group cvs."
+	/usr/sbin/groupdel cvs
+	echo "Removing group cvsadmin."
+	/usr/sbin/groupdel cvsadmin
 fi
 
 %post pserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
+	/etc/rc.d/init.d/rc-inetd reload
 fi
 
 %postun pserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
+	/etc/rc.d/init.d/rc-inetd reload
 fi
 
 %post nserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
+	/etc/rc.d/init.d/rc-inetd reload
 fi
 
 %postun nserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
+	/etc/rc.d/init.d/rc-inetd reload
 fi
 
 %files client
