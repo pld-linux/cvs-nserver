@@ -1,0 +1,42 @@
+diff -urN cvs-nserver-1.11.1.4.org/configure.in cvs-nserver-1.11.1.4/configure.in
+--- cvs-nserver-1.11.1.4.org/configure.in	Sun May 19 11:06:44 2002
++++ cvs-nserver-1.11.1.4/configure.in	Sun May 19 11:10:49 2002
+@@ -172,7 +172,7 @@
+ 
+ AC_FUNC_FNMATCH
+ if test "$ac_cv_func_fnmatch_works" = no; then
+-  LIBOBJS="$LIBOBJS fnmatch.o"
++  AC_LIBOBJ([fnmatch])
+ fi
+ 
+ # Try to find connect and gethostbyname.
+@@ -277,7 +277,7 @@
+   AC_DEFINE(ENCRYPTION)
+ fi
+ 
+-AC_CHECK_FUNC(gethostname, :, LIBOBJS="$LIBOBJS hostname.o")
++AC_CHECK_FUNC(gethostname, :, AC_LIBOBJ([hostname]))
+ 
+ # Check for options requesting client and server feature. If none are
+ # given and we have connect(), we want the full client & server arrangement.
+@@ -361,7 +361,7 @@
+ [AC_TRY_COMPILE([], [return __CYGWIN32__;],
+ ccvs_cv_sys_cygwin32=yes, ccvs_cv_sys_cygwin32=no)])
+ if test $ccvs_cv_sys_cygwin32 = yes; then
+-  LIBOBJS="$LIBOBJS fncase.o"
++  AC_LIBOBJ([fncase])
+   LIBS="$LIBS -ladvapi32"
+ 
+   dnl On Windows you can only change file times if you can write to
+diff -urN cvs-nserver-1.11.1.4.org/doc/Makefile.am cvs-nserver-1.11.1.4/doc/Makefile.am
+--- cvs-nserver-1.11.1.4.org/doc/Makefile.am	Sun May 19 11:06:44 2002
++++ cvs-nserver-1.11.1.4/doc/Makefile.am	Sun May 19 11:13:13 2002
+@@ -14,7 +14,7 @@
+ 
+ #DISTFILES = \
+ #	.cvsignore \
+-#	RCSFILES \
++#	RCSFILES
+ 
+ # AUTOMAKE_OPTIONS = no-texinfo.tex
+ 

@@ -1,12 +1,14 @@
---- ./src/Makefile.in.orig	Sat Jul 21 12:32:51 2001
-+++ ./src/Makefile.in	Sat Jul 21 12:44:56 2001
-@@ -705,8 +705,7 @@
+diff -urN cvs-nserver-1.11.1.4.org/src/Makefile.am cvs-nserver-1.11.1.4/src/Makefile.am
+--- cvs-nserver-1.11.1.4.org/src/Makefile.am	Sun May 19 11:15:31 2002
++++ cvs-nserver-1.11.1.4/src/Makefile.am	Sun May 19 11:23:37 2002
+@@ -181,8 +181,8 @@
  
  install-exec-local:
    ifeq ($(enable_setuid), yes)
 -	$(INSTALL_PROGRAM) -o $(setuid_user) -g $(setuid_group) -m 4750 \
 -			cvspasswd $(bindir)/cvspasswd
-+	$(INSTALL_PROGRAM) cvspasswd $(DESTDIR)$(bindir)/cvspasswd
++	$(INSTALL_PROGRAM) -m 4750 \
++			cvspasswd $(DESTDIR)$(bindir)/cvspasswd
    endif
  
- # version.c
+ ## MAINTAINER Targets
