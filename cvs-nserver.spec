@@ -78,15 +78,15 @@ dosyalarý bakýmýnýn birden çok yazýlým geliþtiricisi tarafýndan
 eþzamanlý olarak yapýlmasýný kontrol etmek için gereken iþlevleri
 saðlar.
 
-%package -n cvs-common
+%package -n cvs-nclient
 Summary:        Concurrent Versions System - common
 Summary(pl):    Concurrent Versions System
 Group:          Development/Version Control
 
-%description -n cvs-common
+%description -n cvs-nclient
 Client and some common files.
 
-%description -l pl -n cvs-common
+%description -l pl -n cvs-nclient
 Klient CVS i trochê wspólnych plików.
 
 %package -n cvs-nserver-common
@@ -200,7 +200,7 @@ else
 	/usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
 fi
 
-%post -n cvs-common
+%post -n cvs-nclient
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 
@@ -242,14 +242,14 @@ if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%postun -n cvs-common
+%postun -n cvs-nclient
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 
-%files -n cvs-common
+%files -n cvs-nclient
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
