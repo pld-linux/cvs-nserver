@@ -1,6 +1,26 @@
-diff -urN cvs-nserver-1.11.1.4.org/configure.in cvs-nserver-1.11.1.4/configure.in
---- cvs-nserver-1.11.1.4.org/configure.in	Sun May 19 11:06:44 2002
-+++ cvs-nserver-1.11.1.4/configure.in	Sun May 19 11:10:49 2002
+diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configure.in
+--- cvs-nserver-1.11.1.52.orig/configure.in	Sun May 19 11:06:44 2002
++++ cvs-nserver-1.11.1.52/configure.in	Sun May 19 11:10:49 2002
+@@ -10,7 +10,6 @@
+ # initialize test framework
+ AC_CONFIG_TESTDIR(tests)
+ AC_CONFIG_FILES([tests/Makefile \
+-                 tests/atconfig \
+                  tests/package.m4 \
+                  tests/cvs:tests/wrapsh.in],
+                 [chmod +x tests/cvs])
+@@ -22,10 +21,7 @@
+ # their path, the installer can configure with a path that has GNU m4
+ # first and get that path embedded in the installed autoconf and
+ # autoheader scripts.
+-AC_PROG_GNU_M4
+-if test x"$ac_cv_prog_gnu_m4" != xyes; then
+-  AC_MSG_ERROR([GNU m4 1.4 is required])
+-fi
++AC_CHECK_PROG(M4,m4)
+ # This is needed because Automake does not seem to realize there is
+ # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
+ AC_SUBST(M4)
 @@ -172,7 +172,7 @@
  
  AC_FUNC_FNMATCH
@@ -28,6 +48,14 @@ diff -urN cvs-nserver-1.11.1.4.org/configure.in cvs-nserver-1.11.1.4/configure.i
    LIBS="$LIBS -ladvapi32"
  
    dnl On Windows you can only change file times if you can write to
+@@ -453,7 +453,6 @@
+ 	  lib/Makefile \
+ 	  man/Makefile \
+ 	  os2/Makefile \
+-	  scripts/Makefile \
+ 	  src/Makefile \
+           src/tests/Makefile \
+ 	  tools/Makefile \
 diff -urN cvs-nserver-1.11.1.4.org/doc/Makefile.am cvs-nserver-1.11.1.4/doc/Makefile.am
 --- cvs-nserver-1.11.1.4.org/doc/Makefile.am	Sun May 19 11:06:44 2002
 +++ cvs-nserver-1.11.1.4/doc/Makefile.am	Sun May 19 11:13:13 2002

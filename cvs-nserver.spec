@@ -4,24 +4,24 @@ Summary(fr):	Un système pour maintenir à jour des fichiers - nserver
 Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
-Version:	1.11.1.4
-Release:	4
+Version:	1.11.1.52
+Release:	1
 License:	GPL
 Group:		Development/Version Control
-Source0:	http://unc.dl.sourceforge.net/sourceforge/cvs-nserver/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.sourceforge.net/pub/sourceforge/cvs-nserver/%{name}-%{version}.tar.gz
 Source1:	%{name}.inetd
 Source2:	cvs-pserver.inetd
 Patch0:		%{name}-cvspasswd.patch
 Patch1:		%{name}-info.patch
-# outdated, but maybe will be needed for checkpasswd (outside programs):
-Patch3:		%{name}-PAM_fix.patch
-Patch4:		%{name}-am_ac.patch
-Patch5:		%{name}-zlib.patch
-Patch6:		%{name}-cvspass.patch
-Patch7:		%{name}-home_etc.patch
+Patch2:		%{name}-am_ac.patch
+Patch3:		%{name}-cvspass.patch
+Patch4:		%{name}-home_etc.patch
+Patch5:		%{name}-ssl-link.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	openssl-devel
 BuildRequires:	texinfo
+BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_cvsroot	/home/services/cvsroot
@@ -85,26 +85,23 @@ dosyalarý bakýmýnýn birden çok yazýlým geliþtiricisi tarafýndan
 eþzamanlý olarak yapýlmasýný kontrol etmek için gereken iþlevleri
 saðlar.
 
-%package -n cvs-nserver-client
+%package client
 Summary:	Concurrent Versions System - client
 Summary(pl):	Concurrent Versions System - klient
 Group:		Development/Version Control
 Obsoletes:	cvs-npclient
 Obsoletes:	cvs
 
-%description -n cvs-nserver-client
+%description client
 CVS client.
 
-%description -n cvs-nserver-client -l pl
+%description client -l pl
 Klient CVS.
 
-%package -n cvs-nserver-common
+%package common
 Summary:	Concurrent Versions System - common files
 Summary(pl):	Concurrent Versions System - wspólne pliki
 Group:		Development/Version Control
-Requires:	cvs-nserver-client
-Obsoletes:	cvs-nserver
-Obsoletes:	cvs
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
@@ -113,49 +110,53 @@ Requires(pre):	cvs-nserver-client
 Requires(pre):	fileutils
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires:	cvs-nserver-client
+Obsoletes:	cvs-nserver
+Obsoletes:	cvs
 
-%description -n cvs-nserver-common
+%description common
 CVS - common server files.
 
-%description -n cvs-nserver-common -l pl
+%description common -l pl
 Wspólne pliki serwerów CVS.
 
-%package -n cvs-nserver-pserver
+%package pserver
 Summary:	Concurrent Versions System - pserver
 Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
+PreReq:		rc-inetd
 Requires:	cvs-nserver-common
 Obsoletes:	cvs-npserver
-PreReq:		rc-inetd
+Obsoletes:	css-pserver
 
-%description -n cvs-nserver-pserver
+%description pserver
 CVS server - pserver files.
 
-%description -n cvs-nserver-pserver -l pl
+%description pserver -l pl
 Serwer CVS - pliki pservera.
 
-%package -n cvs-nserver-nserver
+%package nserver
 Summary:	Concurrent Versions System - nserver
 Summary(pl):	Concurrent Versions System - nserver
 Group:		Development/Version Control
+PreReq:		rc-inetd
 Requires:	cvs-nserver-common
 Obsoletes:	cvs-nserver
-PreReq:		rc-inetd
 
-%description -n cvs-nserver-nserver
+%description nserver
 CVS server - nserver files.
 
-%description -n cvs-nserver-nserver -l pl
+%description nserver -l pl
 Serwer CVS - pliki nservera.
 
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
 
 %build
 %{__aclocal}
@@ -166,6 +167,7 @@ Serwer CVS - pliki nservera.
 	--enable-client \
 	--enable-server \
 	--enable-setuid \
+	--with-openssl \
 	--without-gssapi
 %{__make}
 
@@ -281,7 +283,8 @@ fi
 
 %files -n cvs-nserver-client
 %defattr(644,root,root,755)
-%doc AUTHORS BUGS NEWS PROJECTS TODO FAQ
+%doc AUTHORS BUGS ChangeLog FAQ FAQ.nserver NEWS NEWS.nserver PROJECTS
+%doc README README.checkpassword TODO
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
 %{_infodir}/cvs*

@@ -1,0 +1,31 @@
+--- cvs-nserver-1.11.1.52/configure.in.orig	Sat Jan 18 11:30:19 2003
++++ cvs-nserver-1.11.1.52/configure.in	Sat Jan 18 11:38:45 2003
+@@ -325,12 +325,15 @@
+ AC_DEFINE([HAVE_OPENSSL])
+ ], [ AC_MSG_RESULT([no])])
+ 
++SSL_LIBS=""
+ if test "$with_openssl" = yes; then
+   AC_CHECK_HEADERS(openssl/ssl.h)
++  save_LIBS="$LIBS"; LIBS=""
+   AC_SEARCH_LIBS(CRYPTO_malloc, crypto)
+   AC_SEARCH_LIBS(SSL_CTX_new, ssl)
++  SSL_LIBS="$LIBS"; LIBS="$save_LIBS"
+ fi
+-
++AC_SUBST(SSL_LIBS)
+ 
+ # Check for options requesting client and server feature. If none are
+ # given and we have connect(), we want the full client & server arrangement.
+--- cvs-nserver-1.11.1.52/src/Makefile.am.orig	Sat Jan 18 11:30:19 2003
++++ cvs-nserver-1.11.1.52/src/Makefile.am	Sat Jan 18 11:39:38 2003
+@@ -156,7 +156,8 @@
+ 	../diff/libdiff.a \
+ 	../lib/libcvs.a \
+ 	../acl/libcvsacl.a \
+-	libncli.a
++	libncli.a \
++	$(SSL_LIBS)
+ 
+ cvschkpw_SOURCES = \
+ 	cvschkpw.c \
