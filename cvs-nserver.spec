@@ -97,8 +97,8 @@ CVS client.
 Klient CVS.
 
 %package -n cvs-nserver-common
-Summary:	Concurrent Versions System - common files.
-Summary(pl):	Concurrent Versions System - wspólne pliki.
+Summary:	Concurrent Versions System - common files
+Summary(pl):	Concurrent Versions System - wspólne pliki
 Group:		Development/Version Control
 Requires:	cvs-nserver-client
 Obsoletes:	cvs-nserver
