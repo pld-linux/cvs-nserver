@@ -1,0 +1,91 @@
+--- cvs-nserver-1.11.1.52/src/server.c.orig	2005-02-16 00:11:57.460798401 +0100
++++ cvs-nserver-1.11.1.52/src/server.c	2005-02-26 20:25:07.156114626 +0100
+@@ -3274,10 +3274,13 @@
+ 	buf_flush (buf_to_net, 1);
+ 	buf_shutdown (protocol_inbuf);
+ 	buf_free (protocol_inbuf);
++	protocol_inbuf = NULL;
+ 	buf_shutdown (stderrbuf);
+ 	buf_free (stderrbuf);
++	stderrbuf = NULL;
+ 	buf_shutdown (stdoutbuf);
+ 	buf_free (stdoutbuf);
++	stdoutbuf = NULL;
+     }
+ 
+     if (errs)
+@@ -4818,12 +4821,19 @@
+ 	    error (0, status, "shutting down buffer from client");
+ 	    buf_flush (buf_to_net, 1);
+ 	}
++	buf_free (buf_from_net);
++	buf_from_net = NULL;
+     }
+ 
+     if (dont_delete_temp)
+     {
+ 	if (buf_to_net != NULL)
++	{
+ 	    (void) buf_shutdown (buf_to_net);
++	    buf_free (buf_to_net);
++	    buf_to_net = NULL;
++	    error_use_protocol = 0;
++	}
+ 	return;
+     }
+ 
+@@ -4921,7 +4931,13 @@
+     noexec = save_noexec;
+ 
+     if (buf_to_net != NULL)
++    {
++	(void) buf_flush (buf_to_net, 1);
+ 	(void) buf_shutdown (buf_to_net);
++	buf_free (buf_to_net);
++	buf_to_net = NULL;
++	error_use_protocol = 0;
++    }
+ }
+ 
+ int server_active = 0;
+@@ -5063,25 +5079,6 @@
+ 	}
+     }
+ 
+-#ifdef SIGABRT
+-    (void) SIG_register (SIGABRT, server_cleanup);
+-#endif
+-#ifdef SIGHUP
+-    (void) SIG_register (SIGHUP, server_cleanup);
+-#endif
+-#ifdef SIGINT
+-    (void) SIG_register (SIGINT, server_cleanup);
+-#endif
+-#ifdef SIGQUIT
+-    (void) SIG_register (SIGQUIT, server_cleanup);
+-#endif
+-#ifdef SIGPIPE
+-    (void) SIG_register (SIGPIPE, server_cleanup);
+-#endif
+-#ifdef SIGTERM
+-    (void) SIG_register (SIGTERM, server_cleanup);
+-#endif
+-
+     /* Now initialize our argument vector (for arguments from the client).  */
+ 
+     /* Small for testing.  */
+@@ -5664,12 +5661,12 @@
+     if (len == 0)
+ 	len = strlen (str);
+ #ifdef SERVER_SUPPORT
+-    if (error_use_protocol)
++    if (error_use_protocol && buf_to_net != NULL)
+     {
+ 	buf_output (saved_output, str, len);
+ 	buf_copy_lines (buf_to_net, saved_output, 'M');
+     }
+-    else if (server_active)
++    else if (server_active && protocol != NULL)
+     {
+ 	buf_output (saved_output, str, len);
+ 	buf_copy_lines (protocol, saved_output, 'M');
