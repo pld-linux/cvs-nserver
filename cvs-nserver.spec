@@ -178,46 +178,13 @@ mv	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO
 
 %pre -n cvs-nserver-common
-if [ -n "`getgid cvs`" ]; then
-	if [ "`getgid cvs`" != "52" ]; then
-		echo "Warning: group cvs haven't gid=52. Correct this before installing cvs-nserver" 1>&2
-		exit 1
-	fi
-else
-	echo "Making group cvs GID=52"
-	/usr/sbin/groupadd -g 52 -r -f cvs
-fi
-if [ -n "`getgid cvsadmin`" ]; then
-	if [ "`getgid cvsadmin`" != "53" ]; then
-		echo "Warning: group cvsadmin haven't gid=53. Correct this before installing cvs-nserver" 1>&2
-		exit 1
-	fi
-else
-	echo "Making group cvsadmin GID=53"
-	/usr/sbin/groupadd -g 53 -r -f cvsadmin
-fi
-if [ -n "`id -u cvs 2>/dev/null`" ]; then
-	if [ "`id -u cvs`" != "52" ]; then
-		echo "Warning: user cvs haven't uid=52. Correct this before installing cvs-nserver" 1>&2
-		exit 1
-	fi
-else
-	echo "Making user cvs UID=52"
-	/usr/sbin/useradd -u 52 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvs cvs 1>&2
-fi
-if [ -n "`id -u cvsadmin 2>/dev/null`" ]; then
-	if [ "`id -u cvsadmin`" != "53" ]; then
-		echo "Warning: user cvsadmin haven't uid=53. Correct this before installing cvs-nserver" 1>&2
-		exit 1
-	fi
-else
-	echo "Making user cvsadmin UID=53"
-	/usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
-fi
+GROUP=cvs; GID=52; %groupadd
+USER=cvs; UID=52; HOMEDIR=%{_cvsroot}; COMMENT="CVS user"; %useradd
+GROUP=cvsadmin; GID=53; %groupadd
+USER=cvsadmin; UID=53; HOMEDIR=%{_cvsroot}; COMMENT="CVS user"; %useradd
 
 %post -n cvs-nclient
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
-
+%fix-info-dir
 
 %post -n cvs-nserver-experimental 
 if [ "$1" = 1 ]; then
@@ -225,9 +192,7 @@ if [ "$1" = 1 ]; then
 	%{_bindir}/cvs -d :local:%{_cvsroot} init
 	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
 fi
-if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
-fi
+%rc_inetd_post
 
 %post -n cvs-npserver
 if [ "$1" = 1 ]; then
@@ -235,34 +200,22 @@ if [ "$1" = 1 ]; then
 	%{_bindir}/cvs -d :local:%{_cvsroot} init
 	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
 fi
-if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
-fi
+%rc_inetd_post
 
 %postun -n cvs-nserver-common
-if [ "$1" = "0" ]; then
-	echo "Removing group cvs GID=52"
-	/usr/sbin/userdel cvs
-	echo "Removing group cvsadmin GID=53"
-	/usr/sbin/userdel cvsadmin
-	echo "Removing user cvs UID=52"
-	/usr/sbin/groupdel cvs
-	echo "Removing user cvsadmin UID=53"
-	/usr/sbin/groupdel cvsadmin
-fi
+USER=cvs; %userdel
+GROUP=cvs; %groupdel
+USER=cvsadmin; %userdel
+GROUP=cvsadmin; %groupdel
 
 %postun -n cvs-nserver-experimental
-if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
-fi
+%rc_inetd_postun
 
 %postun -n cvs-npserver
-if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
-fi
+%rc_inetd_postun
 
 %postun -n cvs-nclient
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%fix_info_dir
 
 %clean
 rm -rf $RPM_BUILD_ROOT
