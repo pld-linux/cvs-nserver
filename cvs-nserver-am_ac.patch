@@ -35,7 +35,7 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
  fi
  
 -AC_CHECK_FUNC(gethostname, :, LIBOBJS="$LIBOBJS hostname.o")
-+AC_CHECK_FUNC(gethostname, :, AC_LIBOBJ([hostname]))
++AC_CHECK_FUNC(gethostname, :, [AC_LIBOBJ([hostname])])
  
  # Check for options requesting client and server feature. If none are
  # given and we have connect(), we want the full client & server arrangement.
