@@ -201,6 +201,8 @@ if [ "$1" = 1 ]; then
 	%{_bindir}/cvs -d :local:%{_cvsroot} init
 	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
 fi
+
+%post
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
