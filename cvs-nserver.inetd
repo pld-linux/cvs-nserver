@@ -1,7 +1,7 @@
 SERVICE_NAME=cvspserver
 SOCK_TYPE=stream
 PROTOCOL=tcp
-PORT=2401
+PORT=2402
 FLAGS=nowait
 USER=cvs
 GROUP=cvs
