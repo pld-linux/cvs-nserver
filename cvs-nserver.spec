@@ -22,7 +22,7 @@ BuildRequires:	automake
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_cvsroot	/home/cvsroot
+%define		_cvsroot	/home/services/cvsroot
 
 %description
 CVS is a version control system, which allows you to keep old versions
