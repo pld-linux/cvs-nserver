@@ -1,0 +1,32 @@
+--- cvs-nserver-1.11.1.4/src/login.c	Sat May 26 16:03:39 2001
++++ cvs-1.11.2/src/login.c	Tue Dec 10 10:59:02 2002
+@@ -324,8 +329,18 @@
+     fp = CVS_FOPEN (passfile, "r");
+     if (fp == NULL)
+     {
+-	error (0, errno, "failed to open %s for reading", passfile);
+-	goto error_exit;
++         /* The password file doesn't exist yet - probably because it's
++         * the first time someone uses cvs login. Create it.
++         */
++        fp = CVS_FOPEN (passfile, "w");
++        fclose (fp);
++        fp = CVS_FOPEN (passfile, "r");
++        if (fp == NULL)
++        {
++            /* Creating the password file didn't work. Bail out. */
++            error (0, errno, "warning: failed to open %s for reading", passfile);
++            goto process;
++        }
+     }
+ 
+     cvsroot_canonical = normalize_cvsroot (root);
+@@ -380,6 +378,8 @@
+ 	password = xstrdup (password);
+     }
+ 
++process:
++
+     /* might as well return now */
+     if (operation == password_entry_lookup)
+ 	goto out;
