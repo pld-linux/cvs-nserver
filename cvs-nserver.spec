@@ -10,8 +10,8 @@ License:	GPL
 Group:		Development/Version Control
 Group(pl):	Programowanie/Zarz±dzanie wersjami
 Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
-# outdated, but maybe will be needed for checkpasswd (outside programs):
 Patch0:		%{name}-cvspasswd.patch
+# outdated, but maybe will be needed for checkpasswd (outside programs):
 #Patch0:		cvs-nserver-PAM_fix.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -74,6 +74,17 @@ dosyalarý bakýmýnýn birden çok yazýlým geliþtiricisi tarafýndan
 eþzamanlý olarak yapýlmasýný kontrol etmek için gereken iþlevleri
 saðlar.
 
+%package client
+Summary:	Concurrent Versions System - client
+Summary(pl):    Concurrent Versioning System - klient
+Group:		Development/Version Control
+
+%description client
+client
+
+%description -l pl client
+klient
+
 %prep
 %setup -q 
 %patch0 -p1
@@ -125,21 +136,33 @@ else
 	/usr/sbin/useradd -u 53 -r -d /home/cvsroot -s /bin/false -c "CVS user" -g cvs cvsadmin 1>&2
 fi
 
+%preun
+/usr/sbin/userdel cvs
+/usr/sbin/userdel cvsadmin
+/usr/sbin/groupdel cvs
+/usr/sbin/groupdel cvsadmin
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvschkpw
 %attr(755,root,root) %{_bindir}/cvs-pserver
 %attr(755,root,root) %{_bindir}/cvs-nserver
-%attr(755,root,root) %{_bindir}/cvsbug
 %attr(755,root,root) %{_bindir}/rcs2log
 %attr(4750,cvsadmin,cvs) %{_bindir}/cvspasswd
+%{_infodir}/cvs.*
+%{_mandir}/man8/cvs-pserver.8*
+%{_mandir}/man8/cvs-nserver.8*
+%{_mandir}/man8/cvs-server.8*
+%dir /usr/share/cvs-nserver/*
+
+%files client
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/cvs
+%attr(755,root,root) %{_bindir}/cvsbug
+%{_infodir}/cvsclient*
 %{_mandir}/man1/cvs.1*
 %{_mandir}/man5/cvs.5*
-%{_mandir}/man8/*.8*
-%{_infodir}/cvs*
-%dir /usr/share/cvs-nserver
+%{_mandir}/man8/cvsbug.8*
