@@ -5,7 +5,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.4
-Release:	3
+Release:	4
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://unc.dl.sourceforge.net/sourceforge/cvs-nserver/%{name}-%{version}.tar.gz
@@ -17,6 +17,8 @@ Patch1:		%{name}-info.patch
 Patch3:		%{name}-PAM_fix.patch
 Patch4:		%{name}-am_ac.patch
 Patch5:		%{name}-zlib.patch
+Patch6:		%{name}-cvspass.patch
+Patch7:		%{name}-home_etc.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	texinfo
@@ -152,6 +154,8 @@ Serwer CVS - pliki nservera.
 %patch1 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
+%patch7 -p1
 
 %build
 %{__aclocal}
