@@ -19,7 +19,7 @@ Patch4:		%{name}-home_etc.patch
 Patch5:		%{name}-ssl-link.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	openssl-devel
+BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	texinfo
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
