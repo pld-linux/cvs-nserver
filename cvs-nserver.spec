@@ -17,6 +17,7 @@ Patch2:		%{name}-am_ac.patch
 Patch3:		%{name}-cvspass.patch
 Patch4:		%{name}-home_etc.patch
 Patch5:		%{name}-ssl-link.patch
+Patch5:		%{name}-fix_doc_CVSUSER.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	openssl-devel >= 0.9.7
@@ -158,6 +159,7 @@ Serwer CVS - pliki nservera.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__aclocal}
