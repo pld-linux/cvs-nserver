@@ -17,6 +17,7 @@ Patch0:		%{name}-cvspasswd.patch
 Patch1:		%{name}-info.patch
 # outdated, but maybe will be needed for checkpasswd (outside programs):
 Patch3:		%{name}-PAM_fix.patch
+BuildRequires:	autoconf
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -83,7 +84,7 @@ saðlar.
 
 %package -n cvs-nclient
 Summary:	Concurrent Versions System - common
-Summary(pl):	Concurrent Versions System
+Summary(pl):	Concurrent Versions System - wspólne
 Group:		Development/Version Control
 Group(de):	Entwicklung/Versionkontrolle
 Group(pl):	Programowanie/Zarz±dzanie wersjami
@@ -108,7 +109,7 @@ Obsoletes:	cvs-nserver
 Server - pserver.
 
 %description -l pl -n cvs-npserver
-Server - pserver.
+Serwer - pserver.
 
 %prep
 %setup -q 
@@ -148,10 +149,13 @@ exec %{_bindir}/cvs-nserver %{_cvsroot} -- \
 %{_bindir}/cvschkpw %{_bindir}/cvs nserver
 EOF
 
-mv	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
+mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 	$RPM_BUILD_ROOT%{_bindir}
 
 gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ -n "`getgid cvs`" ]; then
@@ -235,9 +239,6 @@ fi
 
 %postun -n cvs-nclient
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
