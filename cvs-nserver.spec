@@ -21,6 +21,8 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Requires:	cvs-nserver-client
+Obsoletes:	cvs
 
 %define		_cvsroot	/home/cvsroot
 
@@ -83,30 +85,51 @@ dosyalarý bakýmýnýn birden çok yazýlým geliþtiricisi tarafýndan
 eþzamanlý olarak yapýlmasýný kontrol etmek için gereken iþlevleri
 saðlar.
 
-%package -n cvs-nclient
-Summary:	Concurrent Versions System - common
-Summary(pl):	Concurrent Versions System - wspólne
+%package -n cvs-nserver-client
+Summary:	Concurrent Versions System - client
+Summary(pl):	Concurrent Versions System - klient
 Group:		Development/Version Control
 
-%description -n cvs-nclient
-Client and some common files.
+%description -n cvs-nserver-client
+CVS client
 
-%description -n cvs-nclient -l pl
-Klient CVS i trochê wspólnych plików.
+%description -n cvs-nserver-client -l pl
+Klient CVS 
 
-%package -n cvs-npserver
+%package -n cvs-nserver-common
+Summary:	Concurrent Versions System - common files.
+Summary(pl):	Concurrent Versions System - wspólne pliki.
+Group:		Development/Version Control
+
+%description -n cvs-nserver-common
+CVS - common server files.
+
+%description -n cvs-nserver-common -l pl
+Wspólne pliki serwerów CVS
+
+%package -n cvs-nserver-pserver
 Summary:	Concurrent Versions System - pserver
 Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
 Requires:	cvs-nserver-common
-Obsoletes:	cvs
-Obsoletes:	cvs-nserver
 
-%description -n cvs-npserver
-Server - pserver.
+%description -n cvs-nserver-pserver
+CVS server - pserver files.
 
-%description -n cvs-npserver -l pl
-Serwer - pserver.
+%description -n cvs-nserver-pserver -l pl
+Serwer CVS - pliki pservera
+
+%package -n cvs-nserver-nserver
+Summary:	Concurrent Versions System - nserver
+Summary(pl):	Concurrent Versions System - nserver
+Group:		Development/Version Control
+Requires:	cvs-nserver-common
+
+%description -n cvs-nserver-nserver
+CVS server - nserver files.
+
+%description -n cvs-nserver-nserver -l pl
+Serwer CVS - pliki nservera.
 
 %prep
 %setup -q
@@ -158,7 +181,13 @@ gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO FAQ FAQ.nserver
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
+%post -n cvs-nserver-client
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+
+%postun -n cvs-nserver-client
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+
+%pre -n cvs-nserver-common
 if [ -n "`getgid cvs`" ]; then
 	if [ "`getgid cvs`" != "52" ]; then
 		echo "Warning: group cvs haven't gid=52. Correct this before installing cvs-nserver" 1>&2
@@ -195,19 +224,13 @@ else
 	echo "Making user cvsadmin UID=53"
 	/usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
 fi
-
 if [ "$1" = 1 ]; then
 	echo "Initialise repository"
 	%{_bindir}/cvs -d :local:%{_cvsroot} init
 	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
 fi
 
-%post
-if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
-fi
-
-%postun
+%postun -n cvs-nserver-common
 if [ "$1" = "0" ]; then
 	echo "Removing group cvs GID=52"
 	/usr/sbin/userdel cvs
@@ -218,45 +241,28 @@ if [ "$1" = "0" ]; then
 	echo "Removing user cvsadmin UID=53"
 	/usr/sbin/groupdel cvsadmin
 fi
+
+%post -n cvs-nserver-pserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%post -n cvs-nclient
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
-
-%post -n cvs-npserver
-if [ "$1" = 1 ]; then
-	echo "Initialise repository"
-	%{_bindir}/cvs -d :local:%{_cvsroot} init
-	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
-fi
+%postun -n cvs-nserver-pserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%postun -n cvs-npserver
+%post -n cvs-nserver-nserver
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 fi
 
-%postun -n cvs-nclient
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%postun -n cvs-nserver-nserver
+if [ -f /var/lock/subsys/rc-inetd ]; then
+        /etc/rc.d/init.d/rc-inetd reload
+fi
 
-%files
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cvs-nserver*
-%doc NEWS.nserver.gz FAQ.nserver.gz
-/etc/sysconfig/rc-inetd/cvs-nserver
-%attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
-%attr(755,root,root) %{_bindir}/cvschkpw
-%attr(755,root,root) %{_bindir}/rcs2log
-%dir %{_datadir}/cvs-nserver/contrib/*
-%attr(770,cvsadmin,cvs) %dir %{_cvsroot}
-%{_mandir}/man8/cvs-server.8*
-%{_mandir}/man8/cvs-nserver.8*
-
-%files -n cvs-nclient
+%files -n cvs-nserver-client
 %defattr(644,root,root,755)
 %doc {AUTHORS,BUGS,NEWS,PROJECTS,TODO,FAQ}.gz
 %attr(755,root,root) %{_bindir}/cvs
@@ -265,8 +271,24 @@ fi
 %{_mandir}/man[15]/cvs.*
 %{_mandir}/man8/cvsbug.8*
 
-%files -n cvs-npserver
+%files -n cvs-nserver-common
+%defattr(644,root,root,755)
+%attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
+%attr(755,root,root) %{_bindir}/cvschkpw
+%attr(755,root,root) %{_bindir}/rcs2log
+%dir %{_datadir}/cvs-nserver/contrib/*
+%attr(770,cvsadmin,cvs) %dir %{_cvsroot}
+%{_mandir}/man8/cvs-server.8*
+
+%files -n cvs-nserver-pserver
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs-pserver*
 /etc/sysconfig/rc-inetd/cvs-pserver
 %{_mandir}/man8/cvs-pserver.8*
+
+%files -n cvs-nserver-nserver
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/cvs-nserver*
+%doc NEWS.nserver.gz FAQ.nserver.gz
+/etc/sysconfig/rc-inetd/cvs-nserver
+%{_mandir}/man8/cvs-nserver.8*
