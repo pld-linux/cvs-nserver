@@ -4,14 +4,15 @@ Summary(fr):    Un système pour maintenir à jour des fichiers
 Summary(pl):    Concurrent Versioning System
 Summary(tr):    Sürüm denetim sistemi
 Name:		cvs-nserver
-Version:	1.11.1.1
+Version:	1.11.1.2
 Release:	1
 License:	GPL
 Group:		Development/Version Control
 Group(pl):	Programowanie/Zarz±dzanie wersjami
 Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
 # outdated, but maybe will be needed for checkpasswd (outside programs):
-Patch0:		cvs-nserver-PAM_fix.patch
+Patch0:		%{name}-cvspasswd.patch
+#Patch0:		cvs-nserver-PAM_fix.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -74,19 +75,55 @@ eþzamanlý olarak yapýlmasýný kontrol etmek için gereken iþlevleri
 saðlar.
 
 %prep
-%setup -q
+%setup -q 
+%patch0 -p1
 
 %build
 autoconf
 %configure \
 	--enable-encryption \
 	--enable-client \
-	--enable-server
+	--enable-server \
+	--enable-setuid
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
+
+%pre
+if [ -n "`getgid cvs`" ]; then
+	if [ "`getgid cvs`" != "52" ]; then
+		echo "Warning: group cvs haven't gid=52. Correct this before installing cvs-nserver" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 52 -r -f cvs
+fi
+if [ -n "`getgid cvsadmin`" ]; then
+	if [ "`getgid cvsadmin`" != "53" ]; then
+		echo "Warning: group cvsadmin haven't gid=53. Correct this before installing cvs-nserver" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 53 -r -f cvsadmin
+fi
+if [ -n "`id -u cvs 2>/dev/null`" ]; then
+	if [ "`id -u cvs`" != "52" ]; then
+		echo "Warning: user cvs haven't uid=52. Correct this before installing cvs-nserver" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 52 -r -d /home/cvsroot -s /bin/false -c "CVS user" -g cvs cvs 1>&2
+fi
+if [ -n "`id -u cvsadmin 2>/dev/null`" ]; then
+	if [ "`id -u cvsadmin`" != "53" ]; then
+		echo "Warning: user cvsadmin haven't uid=53. Correct this before installing cvs-nserver" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 53 -r -d /home/cvsroot -s /bin/false -c "CVS user" -g cvs cvsadmin 1>&2
+fi
 
 
 %clean
@@ -100,6 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cvs-nserver
 %attr(755,root,root) %{_bindir}/cvsbug
 %attr(755,root,root) %{_bindir}/rcs2log
+%attr(4750,cvsadmin,cvs) %{_bindir}/cvspasswd
 %{_mandir}/man1/cvs.1*
 %{_mandir}/man5/cvs.5*
 %{_mandir}/man8/*.8*
