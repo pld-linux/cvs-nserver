@@ -23,6 +23,7 @@ Patch7:		%{name}-segv.patch
 Patch8:		%{name}-initgroups-rootonly.patch
 Patch9:		%{name}-zlibfix.patch
 Patch10:	%{name}-home_etc2.patch
+URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	openssl-devel >= 0.9.7c
