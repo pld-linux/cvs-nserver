@@ -302,7 +302,9 @@ fi
 %attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
 %attr(755,root,root) %{_bindir}/rcs2log
-%dir %{_datadir}/cvs-nserver/contrib/*
+%dir %{_datadir}/cvs-nserver
+%dir %{_datadir}/cvs-nserver/contrib
+%{_datadir}/cvs-nserver/contrib/*
 %attr(770,cvsadmin,cvs) %dir %{_cvsroot}
 %{_mandir}/man8/cvs-server.8*
 
