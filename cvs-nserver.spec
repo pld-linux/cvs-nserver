@@ -4,7 +4,7 @@ Summary(fr):    Un système pour maintenir à jour des fichiers
 Summary(pl):    Concurrent Versioning System
 Summary(tr):    Sürüm denetim sistemi
 Name:		cvs-nserver
-Version:	1.10.8.3
+Version:	1.10.8.4
 Release:	1
 License:	GPL
 Group:		Development/Version Control
@@ -75,6 +75,8 @@ saðlar.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 %configure \
