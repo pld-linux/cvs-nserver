@@ -1,3 +1,7 @@
+#
+# TODO:
+# - trigger for upgrade from old cvs - after that package stays without any 
+#   users and nserver-common is not installed...
 Summary:	Concurrent Versions System - nserver
 Summary(de):	Concurrent-Versioning-System - nserver
 Summary(fr):	Un système pour maintenir à jour des fichiers - nserver
@@ -5,7 +9,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	5
+Release:	6
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
@@ -110,14 +114,14 @@ Klient CVS.
 Summary:	Concurrent Versions System - common files
 Summary(pl):	Concurrent Versions System - wspólne pliki
 Group:		Development/Version Control
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
-Requires(postun):	/usr/sbin/groupdel
 Requires(pre):	cvs-nserver-client
 Requires(pre):	fileutils
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 Requires:	cvs-nserver-client
 Obsoletes:	cvs-nserver
 
@@ -195,16 +199,32 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/cvs-pserver
 
 cat << EOF >$RPM_BUILD_ROOT%{_bindir}/cvs-pserver-script
 #!/bin/sh
+REPOSITORY="%{_cvsroot}"
+if [ -f /etc/sysconfig/cvsroot ]; then
+	. /etc/sysconfig/cvs
+fi
+
 CVSPASSWD=%{_bindir}/cvspasswd \
-exec %{_bindir}/cvs-pserver %{_cvsroot} -- \
+exec %{_bindir}/cvs-pserver $REPOSITORY -- \
 %{_bindir}/cvschkpw %{_bindir}/cvs pserver
 EOF
 
 cat << EOF >$RPM_BUILD_ROOT%{_bindir}/cvs-nserver-script
 #!/bin/sh
+REPOSITORY="%{_cvsroot}"
+if [ -f /etc/sysconfig/cvsroot ]; then
+	. /etc/sysconfig/cvs
+fi
+
 CVSPASSWD=%{_bindir}/cvspasswd \
-exec %{_bindir}/cvs-nserver %{_cvsroot} -- \
+exec %{_bindir}/cvs-nserver $REPOSITORY -- \
 %{_bindir}/cvschkpw %{_bindir}/cvs nserver
+EOF
+
+cat << EOF >$RPM_BUILD_ROOT/etc/sysconfig/cvs
+# In this file you can specify additional repositories (separated with space)
+# or just set different location.
+#REPOSITORY="%{_cvsroot}"
 EOF
 
 mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
@@ -306,6 +326,7 @@ fi
 
 %files common
 %defattr(644,root,root,755)
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/cvs
 %attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
 %attr(755,root,root) %{_bindir}/rcs2log
@@ -317,13 +338,13 @@ fi
 
 %files pserver
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cvs-pserver*
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/cvs-pserver
+%attr(755,root,root) %{_bindir}/cvs-pserver*
 %{_mandir}/man8/cvs-pserver.8*
 
 %files nserver
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cvs-nserver*
 %doc NEWS.nserver FAQ.nserver
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/cvs-nserver
+%attr(755,root,root) %{_bindir}/cvs-nserver*
 %{_mandir}/man8/cvs-nserver.8*
