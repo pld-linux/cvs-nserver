@@ -90,7 +90,7 @@ t³umaczeniu system kontroli wersji zasobów), który rozszerza
 mo¿liwo¶ci rcs'a z narzêdzia do kontroli zbioru plików w pojedynczym
 katalogu o mo¿liwo¶æ kontroli zbioru hierarchicznie u³o¿onych
 katalogów z plikami. Z pomoc± CVS w ³atwy sposób mo¿na zarz±dzaæ kodem
-¼ród³owym opracowywanym przez nawet bardzo du¿e zespó³y programistów
+¼ród³owym opracowywanym przez nawet bardzo du¿e zespo³y programistów
 umo¿liwiaj±c ¶ledzenie i kontrolê wszystkich zmian w trakcie pracy nad
 projektami i wypuszczaniem pe³nych wersji oprogramowania (release).
 
