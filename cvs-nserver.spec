@@ -88,7 +88,7 @@ Group:		Development/Version Control
 %description -n cvs-nclient
 Client and some common files.
 
-%description -l pl -n cvs-nclient
+%description -n cvs-nclient -l pl
 Klient CVS i trochê wspólnych plików.
 
 %package -n cvs-npserver
@@ -102,11 +102,11 @@ Obsoletes:	cvs-nserver
 %description -n cvs-npserver
 Server - pserver.
 
-%description -l pl -n cvs-npserver
+%description -n cvs-npserver -l pl
 Serwer - pserver.
 
 %prep
-%setup -q 
+%setup -q
 %patch0 -p1
 %patch1 -p1
 
