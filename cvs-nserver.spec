@@ -5,7 +5,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.3
-Release:	2
+Release:	3
 License:	GPL
 Group:		Development/Version Control
 Group(de):	Entwicklung/Versionkontrolle
@@ -255,7 +255,7 @@ fi
 
 %files -n cvs-nclient
 %defattr(644,root,root,755)
-%doc {AUTHORS,BUGS,NEW,PROJECTS,TODO,FAQ}.gz
+%doc {AUTHORS,BUGS,NEWS,PROJECTS,TODO,FAQ}.gz
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
 %{_infodir}/cvs*
