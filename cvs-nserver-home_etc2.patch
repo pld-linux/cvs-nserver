@@ -1,0 +1,24 @@
+--- cvs-nserver-1.11.1.52.orig/src/cvsrc.c	Fri Oct 10 18:28:24 2003
++++ cvs-nserver-1.11.1.52/src/cvsrc.c	Fri Oct 10 18:53:36 2003
+@@ -93,9 +93,10 @@
+ 	sprintf (homeinit, "%s/%s", path, cvsrc);
+     }
+     else {
++    if (getenv("HOME_ETC")) homedir = getenv("HOME_ETC");
+     homeinit = (char *) xmalloc (strlen (homedir) + strlen (cvsrc) + 10);
+     strcpy (homeinit, homedir);
+-    strcat (homeinit, "/");
++    strcat (homeinit, "/.");
+     strcat (homeinit, cvsrc);
+     } /* else */
+     if (path)
+--- cvs-nserver-1.11.1.52.orig/src/login.c	Fri Oct 10 18:28:24 2003
++++ cvs-nserver-1.11.1.52/src/login.c	Fri Oct 10 18:50:08 2003
+@@ -83,6 +83,7 @@
+ 	sprintf (passfile, "%s/%s", path, CVS_PASSWORD_FILE);
+     }
+     else {
++    if (getenv("HOME_ETC")) homedir = getenv("HOME_ETC");
+     passfile =
+         (char *) xmalloc (strlen (homedir) + strlen (CVS_PASSWORD_FILE) + 4);
+     strcpy (passfile, homedir);
