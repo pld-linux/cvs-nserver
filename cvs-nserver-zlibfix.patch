@@ -1,0 +1,23 @@
+--- cvs-nserver-1.11.1.52/src/zlib-client.c.orig	Tue Mar  5 01:27:05 2002
++++ cvs-nserver-1.11.1.52/src/zlib-client.c	Sat Mar 29 00:44:49 2003
+@@ -283,6 +283,7 @@
+ 
+     zcd->zsout.next_in = buf;
+     zcd->zsout.avail_in = len;
++  do {
+     zcd->zsout.next_out = zcd->buf_out;
+     zcd->zsout.avail_out = BUFSIZ;
+ 
+@@ -297,7 +298,11 @@
+ 
+     fprintf(stderr, "Actually writing %d bytes\n", BUFSIZ - zcd->zsout.avail_out);
+ #endif
+-    return ncli->next->write(ncli->next, zcd->buf_out, BUFSIZ - zcd->zsout.avail_out);
++    ret = ncli->next->write(ncli->next, zcd->buf_out, BUFSIZ - zcd->zsout.avail_out);
++    if (ret != NCLI_SUCCESS)
++        return ret;
++  } while(zcd->zsout.avail_out == 0);
++  return ret;
+ }
+ 
+ 
