@@ -1,7 +1,7 @@
 Summary:	Concurrent Versions System
 Summary(de):    Concurrent-Versioning-System
 Summary(fr):    Un système pour maintenir à jour des fichiers
-Summary(pl):    Concurrent Versioning System
+Summary(pl):    Concurrent Versions System
 Summary(tr):    Sürüm denetim sistemi
 Name:		cvs-nserver
 Version:	1.11.1.2
@@ -10,10 +10,14 @@ License:	GPL
 Group:		Development/Version Control
 Group(pl):	Programowanie/Zarz±dzanie wersjami
 Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
+Source1:	%{name}.inetd
+Source2:	cvs-pserver.inetd
 Patch0:		%{name}-cvspasswd.patch
 # outdated, but maybe will be needed for checkpasswd (outside programs):
 #Patch0:		cvs-nserver-PAM_fix.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_cvsroot	/home/cvsroot
 
 %description
 CVS is a version control system, which allows you to keep old versions
@@ -74,16 +78,52 @@ dosyalarý bakýmýnýn birden çok yazýlým geliþtiricisi tarafýndan
 eþzamanlý olarak yapýlmasýný kontrol etmek için gereken iþlevleri
 saðlar.
 
-%package client
-Summary:	Concurrent Versions System - client
-Summary(pl):    Concurrent Versioning System - klient
+%package -n cvs-common
+Summary:        Concurrent Versions System - common
+Summary(pl):    Concurrent Versions System
+Group:          Development/Version Control
+
+%description -n cvs-common
+Client and some common files.
+
+%description -l pl -n cvs-common
+Klient CVS i trochê wspólnych plików.
+
+%package -n cvs-nserver-common
+Summary:        Concurrent Versions System - common
+Summary(pl):    Concurrent Versions System
+Group:          Development/Version Control
+
+%description -n cvs-nserver-common
+Client and some common files.
+
+%description -l pl -n cvs-nserver-common
+Klient CVS i trochê wspólnych plików.
+
+
+%package -n cvs-npserver
+Summary:	Concurrent Versions System - pserver
+Summary(pl):    Concurrent Versions System - pserver
 Group:		Development/Version Control
+Obsoletes:	cvs-nserver,cvs
 
-%description client
-client
+%description -n cvs-npserver
+Server - pserver
 
-%description -l pl client
-klient
+%description -l pl -n cvs-npserver
+Server - pserver
+
+%package -n cvs-nserver-experimental
+Summary:	Concurrent Versions System - nserver
+Summary(pl):    Concurrent Versions System - nserver
+Group:		Development/Version Control
+Obsoletes:	cvs-npserver,cvs
+
+%description -n cvs-nserver-experimental
+Server - nserver
+
+%description -l pl -n cvs-nserver-experimental
+Server - nserver
 
 %prep
 %setup -q 
@@ -100,15 +140,36 @@ autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/{etc/sysconfig/rc-inetd,%{_cvsroot}}
+
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
 
-%pre
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/cvs-nserver
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/cvs-pserver
+
+cat << EOF >$RPM_BUILD_ROOT%{_bindir}/cvs-pserver-script
+#!/bin/sh
+CVSPASSWD=%{_bindir}/cvspasswd \
+exec %{_bindir}/cvs-pserver %{_cvsroot} -- \
+%{_bindir}/cvschkpw %{_bindir}/cvs pserver
+EOF
+
+cat << EOF >$RPM_BUILD_ROOT%{_bindir}/cvs-nserver-script
+#!/bin/sh
+CVSPASSWD=%{_bindir}/cvspasswd \
+exec %{_bindir}/cvs-nserver %{_cvsroot} -- \
+%{_bindir}/cvschkpw %{_bindir}/cvs nserver
+EOF
+
+
+%pre -n cvs-nserver-common
 if [ -n "`getgid cvs`" ]; then
 	if [ "`getgid cvs`" != "52" ]; then
 		echo "Warning: group cvs haven't gid=52. Correct this before installing cvs-nserver" 1>&2
 		exit 1
 	fi
 else
+	echo "Making group cvs GID=52"
 	/usr/sbin/groupadd -g 52 -r -f cvs
 fi
 if [ -n "`getgid cvsadmin`" ]; then
@@ -117,6 +178,7 @@ if [ -n "`getgid cvsadmin`" ]; then
 		exit 1
 	fi
 else
+	echo "Making group cvsadmin GID=53"
 	/usr/sbin/groupadd -g 53 -r -f cvsadmin
 fi
 if [ -n "`id -u cvs 2>/dev/null`" ]; then
@@ -125,7 +187,8 @@ if [ -n "`id -u cvs 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 52 -r -d /home/cvsroot -s /bin/false -c "CVS user" -g cvs cvs 1>&2
+	echo "Making user cvs UID=52"
+	/usr/sbin/useradd -u 52 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvs cvs 1>&2
 fi
 if [ -n "`id -u cvsadmin 2>/dev/null`" ]; then
 	if [ "`id -u cvsadmin`" != "53" ]; then
@@ -133,36 +196,84 @@ if [ -n "`id -u cvsadmin 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 53 -r -d /home/cvsroot -s /bin/false -c "CVS user" -g cvs cvsadmin 1>&2
+	echo "Making user cvsadmin UID=53"
+	/usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
 fi
 
-%preun
-/usr/sbin/userdel cvs
-/usr/sbin/userdel cvsadmin
-/usr/sbin/groupdel cvs
-/usr/sbin/groupdel cvsadmin
+%post -n cvs-common
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+
+
+%post -n cvs-nserver-experimental 
+if [ "$1" = 1 ]; then
+	echo "Initialise repository"
+	%{_bindir}/cvs -d :local:%{_cvsroot} init
+	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
+fi
+if [ -f /var/lock/subsys/rc-inetd ]; then
+        /etc/rc.d/init.d/rc-inetd reload
+fi
+
+%post -n cvs-npserver
+if [ "$1" = 1 ]; then
+	echo "Initialise repository"
+	%{_bindir}/cvs -d :local:%{_cvsroot} init
+	chown -R cvsadmin.cvsadmin %{_cvsroot}/CVSROOT
+fi
+if [ -f /var/lock/subsys/rc-inetd ]; then
+        /etc/rc.d/init.d/rc-inetd reload
+fi
+
+%postun -n cvs-nserver-common
+if [ "$1" = "0" ]; then
+	/usr/sbin/userdel cvs
+	/usr/sbin/userdel cvsadmin
+	/usr/sbin/groupdel cvs
+	/usr/sbin/groupdel cvsadmin
+fi
+
+%postun -n cvs-nserver-experimental
+if [ -f /var/lock/subsys/rc-inetd ]; then
+        /etc/rc.d/init.d/rc-inetd reload
+fi
+
+%postun -n cvs-npserver
+if [ -f /var/lock/subsys/rc-inetd ]; then
+        /etc/rc.d/init.d/rc-inetd reload
+fi
+
+%postun -n cvs-common
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cvschkpw
-%attr(755,root,root) %{_bindir}/cvs-pserver
-%attr(755,root,root) %{_bindir}/cvs-nserver
-%attr(755,root,root) %{_bindir}/rcs2log
-%attr(4750,cvsadmin,cvs) %{_bindir}/cvspasswd
-%{_infodir}/cvs.*
-%{_mandir}/man8/cvs-pserver.8*
-%{_mandir}/man8/cvs-nserver.8*
-%{_mandir}/man8/cvs-server.8*
-%dir /usr/share/cvs-nserver/*
 
-%files client
+%files -n cvs-common
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
-%{_infodir}/cvsclient*
-%{_mandir}/man1/cvs.1*
-%{_mandir}/man5/cvs.5*
+%{_infodir}/cvs*
+%{_mandir}/man[15]/cvs.*
 %{_mandir}/man8/cvsbug.8*
+
+%files -n cvs-nserver-common
+%defattr(644,root,root,755)
+%attr(4750,cvsadmin,cvs) %{_bindir}/cvspasswd
+%attr(755,root,root) %{_bindir}/cvschkpw
+%attr(755,root,root) %{_bindir}/rcs2log
+%dir /usr/share/cvs-nserver/*
+%{_mandir}/man8/cvs-server.8*
+%attr(770,cvsadmin,cvs) %dir %{_cvsroot}
+
+%files -n cvs-nserver-experimental
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/cvs-nserver*
+/etc/sysconfig/rc-inetd/cvs-nserver
+%{_mandir}/man8/cvs-nserver.8*
+
+%files -n cvs-npserver
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/cvs-pserver*
+/etc/sysconfig/rc-inetd/cvs-pserver
+%{_mandir}/man8/cvs-pserver.8*
