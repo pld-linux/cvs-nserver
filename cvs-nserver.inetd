@@ -1,0 +1,10 @@
+SERVICE_NAME=cvspserver
+SOCK_TYPE=stream
+PROTOCOL=tcp
+PORT=2401
+FLAGS=nowait
+USER=cvs
+GROUP=cvs
+SERVER=tcpd
+DAEMON=/usr/bin/cvs-nserver-script
+DAEMONARGS=""
