@@ -1,0 +1,12 @@
+diff -urN cvs-nserver-1.11.1.52.org/contrib/rcs2log.sh cvs-nserver-1.11.1.52/contrib/rcs2log.sh
+--- cvs-nserver-1.11.1.52.org/contrib/rcs2log.sh	2004-05-18 10:15:50.467330264 +0200
++++ cvs-nserver-1.11.1.52/contrib/rcs2log.sh	2004-05-18 10:17:07.522616080 +0200
+@@ -564,7 +564,7 @@
+ # Sort the log entries, first by date+time (in reverse order),
+ # then by author, then by log entry, and finally by file name and revision
+ # (just in case).
+-sort +2 -4r +4 +0 |
++sort -k 3,4r -k 5 -k 1 |
+ 
+ # Finally, reformat the sorted log entries.
+ $AWK '
