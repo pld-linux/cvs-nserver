@@ -5,7 +5,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.3
-Release:	1
+Release:	2
 License:	GPL
 Group:		Development/Version Control
 Group(de):	Entwicklung/Versionkontrolle
@@ -152,7 +152,7 @@ EOF
 mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 	$RPM_BUILD_ROOT%{_bindir}
 
-gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO
+gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO FAQ FAQ.nserver
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -243,7 +243,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs-nserver*
-%doc NEWS.nserver.gz
+%doc NEWS.nserver.gz FAQ.nserver.gz
 /etc/sysconfig/rc-inetd/cvs-nserver
 %attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
@@ -255,7 +255,7 @@ fi
 
 %files -n cvs-nclient
 %defattr(644,root,root,755)
-%doc {AUTHORS,BUGS,NEW,PROJECTS,TODO}
+%doc {AUTHORS,BUGS,NEW,PROJECTS,TODO,FAQ}.gz
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
 %{_infodir}/cvs*
