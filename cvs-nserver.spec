@@ -113,7 +113,7 @@ Requires(pre): /bin/id
 Requires(pre): /usr/sbin/groupadd
 Requires(pre): /usr/sbin/useradd
 Requires(postun):      /usr/sbin/userdel
-Requires(postun):      /usr/sbin/group
+Requires(postun):      /usr/sbin/groupdel
 Requires(pre):	cvs-nserver-client
 Requires(pre):	fileutils
 Requires:	cvs-nserver-client
