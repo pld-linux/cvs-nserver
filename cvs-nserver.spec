@@ -4,18 +4,21 @@ Summary(fr):	Un système pour maintenir à jour des fichiers - nserver
 Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
-Version:	1.11.1.3
-Release:	3
+Version:	1.11.1.4
+Release:	1
 License:	GPL
 Group:		Development/Version Control
-Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
+Source0:	http://unc.dl.sourceforge.net/sourceforge/cvs-nserver/%{name}-%{version}.tar.gz
 Source1:	%{name}.inetd
 Source2:	cvs-pserver.inetd
 Patch0:		%{name}-cvspasswd.patch
 Patch1:		%{name}-info.patch
 # outdated, but maybe will be needed for checkpasswd (outside programs):
 Patch3:		%{name}-PAM_fix.patch
+Patch4:		%{name}-am_ac.patch
+Patch5:		%{name}-zlib.patch
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -109,9 +112,13 @@ Serwer - pserver.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch4 -p1
+%patch5 -p1
 
 %build
+aclocal
 autoconf
+automake -a -c
 %configure \
 	--enable-encryption \
 	--enable-client \
