@@ -4,12 +4,13 @@ Summary(fr):    Un système pour maintenir à jour des fichiers
 Summary(pl):    Concurrent Versioning System
 Summary(tr):    Sürüm denetim sistemi
 Name:		cvs-nserver
-Version:	1.10.8.4
+Version:	1.11.1.1
 Release:	1
 License:	GPL
 Group:		Development/Version Control
 Group(pl):	Programowanie/Zarz±dzanie wersjami
 Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
+# outdated, but maybe will be needed for checkpasswd (outside programs):
 Patch0:		cvs-nserver-PAM_fix.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -74,47 +75,33 @@ saðlar.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
+autoconf
 %configure \
-	--enable-pam
+	--enable-encryption \
+	--enable-client \
+	--enable-server
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} installdirs
-%{__make} PAMDIR=$RPM_BUILD_ROOT/etc/pam.d install
-%{__make} install-setuid
-rm -f $RPM_BUILD_ROOT%{_prefix}/info/cvs*
-%{__make} install-info
+%{__make} DESTDIR=$RPM_BUILD_ROOT install
 
-gzip -9nf $RPM_BUILD_ROOT{%{_infodir}/*,%{_mandir}/man?/*} \
-	BUGS FAQ HACKING MINOR-BUGS NEWS PROJECTS README TESTS TODO
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvschkpw
-%attr(755,root,root) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvs-pserver
 %attr(755,root,root) %{_bindir}/cvs-nserver
-%attr(755,root,root) %{_bindir}/checkpassword
-%attr(755,root,root) %{_bindir}/checkpassword-pam
 %attr(755,root,root) %{_bindir}/cvsbug
 %attr(755,root,root) %{_bindir}/rcs2log
-/etc/pam.d/cvspserver
 %{_mandir}/man1/cvs.1*
 %{_mandir}/man5/cvs.5*
-%{_mandir}/man8/cvsbug.8*
-%{_mandir}/man8/cvs-nserver.8*
-%{_mandir}/man8/cvs-pserver.8*
-%{_mandir}/man8/cvs-server.8*
+%{_mandir}/man8/*.8*
 %{_infodir}/cvs*
-%{_libdir}/cvs
+%dir /usr/share/cvs-nserver
