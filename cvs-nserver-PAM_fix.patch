@@ -1,0 +1,12 @@
+diff -Nru cvs-nserver-1.10.8.3/checkpassword/log_pam.c cvs-nserver-1.10.8.3.new/checkpassword/log_pam.c
+--- cvs-nserver-1.10.8.3/checkpassword/log_pam.c	Sun May 21 18:14:31 2000
++++ cvs-nserver-1.10.8.3.new/checkpassword/log_pam.c	Wed Sep 13 23:18:24 2000
+@@ -23,7 +23,7 @@
+ #include <security/pam_misc.h>
+ #include <security/pam_appl.h>
+ #include <security/pam_modules.h>
+-#include <security/pam_filter.h>
++
+ /* Static variables used to communicate between the conversation function
+  * and the server_login function
+  */
