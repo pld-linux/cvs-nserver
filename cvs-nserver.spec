@@ -1,20 +1,23 @@
 Summary:	Concurrent Versions System
-Summary(de):    Concurrent-Versioning-System
-Summary(fr):    Un système pour maintenir à jour des fichiers
-Summary(pl):    Concurrent Versions System
-Summary(tr):    Sürüm denetim sistemi
+Summary(de):	Concurrent-Versioning-System
+Summary(fr):	Un système pour maintenir à jour des fichiers
+Summary(pl):	Concurrent Versions System
+Summary(tr):	Sürüm denetim sistemi
 Name:		cvs-nserver
 Version:	1.11.1.2
 Release:	1
 License:	GPL
 Group:		Development/Version Control
+Group(de):	Entwicklung/Versionkontrolle
 Group(pl):	Programowanie/Zarz±dzanie wersjami
 Source0:	http://alexm.here.ru/cvs-nserver/download/%{name}-%{version}.tar.gz
 Source1:	%{name}.inetd
 Source2:	cvs-pserver.inetd
 Patch0:		%{name}-cvspasswd.patch
+Patch1:		%{name}-info.patch
 # outdated, but maybe will be needed for checkpasswd (outside programs):
-#Patch0:		cvs-nserver-PAM_fix.patch
+Patch3:		%{name}-PAM_fix.patch
+BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_cvsroot	/home/cvsroot
@@ -62,9 +65,9 @@ système de contrôle de version.
 CVS jest nak³adk± na rcs (Revision Control System, czyli w wolnym
 t³umaczeniu system kontroli wersji zasobów), który rozszerza
 mo¿liwo¶ci rcs'a z narzêdzia do kontroli zbioru plików w pojedynczym
-katalogu o mo¿liwo¶æ kontroli zbioru hierarchicznie u³o¿onych katalogów
-z plikami. Z pomoc± CVS w ³atwy sposób mo¿na zarz±dzaæ kodem ¼ród³owym
-opracowywanym przez nawet bardzo du¿e zespó³y programistów
+katalogu o mo¿liwo¶æ kontroli zbioru hierarchicznie u³o¿onych
+katalogów z plikami. Z pomoc± CVS w ³atwy sposób mo¿na zarz±dzaæ kodem
+¼ród³owym opracowywanym przez nawet bardzo du¿e zespó³y programistów
 umo¿liwiaj±c ¶ledzenie i kontrolê wszystkich zmian w trakcie pracy nad
 projektami i wypuszczaniem pe³nych wersji oprogramowania (release).
 
@@ -79,9 +82,11 @@ eþzamanlý olarak yapýlmasýný kontrol etmek için gereken iþlevleri
 saðlar.
 
 %package -n cvs-nclient
-Summary:        Concurrent Versions System - common
-Summary(pl):    Concurrent Versions System
-Group:          Development/Version Control
+Summary:	Concurrent Versions System - common
+Summary(pl):	Concurrent Versions System
+Group:		Development/Version Control
+Group(de):	Entwicklung/Versionkontrolle
+Group(pl):	Programowanie/Zarz±dzanie wersjami
 
 %description -n cvs-nclient
 Client and some common files.
@@ -90,9 +95,11 @@ Client and some common files.
 Klient CVS i trochê wspólnych plików.
 
 %package -n cvs-nserver-common
-Summary:        Concurrent Versions System - common
-Summary(pl):    Concurrent Versions System
-Group:          Development/Version Control
+Summary:	Concurrent Versions System - common
+Summary(pl):	Concurrent Versions System
+Group:		Development/Version Control
+Group(de):	Entwicklung/Versionkontrolle
+Group(pl):	Programowanie/Zarz±dzanie wersjami
 
 %description -n cvs-nserver-common
 Client and some common files.
@@ -100,11 +107,12 @@ Client and some common files.
 %description -l pl -n cvs-nserver-common
 Klient CVS i trochê wspólnych plików.
 
-
 %package -n cvs-npserver
 Summary:	Concurrent Versions System - pserver
-Summary(pl):    Concurrent Versions System - pserver
+Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
+Group(de):	Entwicklung/Versionkontrolle
+Group(pl):	Programowanie/Zarz±dzanie wersjami
 Obsoletes:	cvs-nserver,cvs
 
 %description -n cvs-npserver
@@ -115,8 +123,10 @@ Server - pserver
 
 %package -n cvs-nserver-experimental
 Summary:	Concurrent Versions System - nserver
-Summary(pl):    Concurrent Versions System - nserver
+Summary(pl):	Concurrent Versions System - nserver
 Group:		Development/Version Control
+Group(de):	Entwicklung/Versionkontrolle
+Group(pl):	Programowanie/Zarz±dzanie wersjami
 Obsoletes:	cvs-npserver,cvs
 
 %description -n cvs-nserver-experimental
@@ -128,6 +138,7 @@ Server - nserver
 %prep
 %setup -q 
 %patch0 -p1
+%patch1 -p1
 
 %build
 autoconf
@@ -161,6 +172,10 @@ exec %{_bindir}/cvs-nserver %{_cvsroot} -- \
 %{_bindir}/cvschkpw %{_bindir}/cvs nserver
 EOF
 
+mv	$RPM_BUILD_ROOT%{_datadir}cvs-nserver/contrib/rcs2log \
+	$RPM_BUILD_ROOT%{_bindir}
+
+gzip -9nf AUTHORS BUGS NEWS NEWS.nserver PROJECTS TODO
 
 %pre -n cvs-nserver-common
 if [ -n "`getgid cvs`" ]; then
@@ -248,21 +263,22 @@ fi
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-
 %files -n cvs-nclient
 %defattr(644,root,root,755)
+%doc *.gz
 %attr(755,root,root) %{_bindir}/cvs
 %attr(755,root,root) %{_bindir}/cvsbug
+%attr(755,root,root) %{_bindir}/rcs2log
 %{_infodir}/cvs*
 %{_mandir}/man[15]/cvs.*
 %{_mandir}/man8/cvsbug.8*
 
 %files -n cvs-nserver-common
 %defattr(644,root,root,755)
-%attr(4750,cvsadmin,cvs) %{_bindir}/cvspasswd
+%attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
 %attr(755,root,root) %{_bindir}/rcs2log
-%dir /usr/share/cvs-nserver/*
+%dir %{_datadir}/cvs-nserver/*
 %{_mandir}/man8/cvs-server.8*
 %attr(770,cvsadmin,cvs) %dir %{_cvsroot}
 
