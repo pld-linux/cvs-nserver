@@ -1,0 +1,48 @@
+--- cvs-nserver-1.11.1.52/src/server.c.orig	Sat Mar 23 01:33:45 2002
++++ cvs-nserver-1.11.1.52/src/server.c	Tue Mar 11 20:53:37 2003
+@@ -5009,7 +5009,7 @@
+     /* Now initialize our argument vector (for arguments from the client).  */
+ 
+     /* Small for testing.  */
+-    argument_vector_size = 1;
++    argument_vector_size = 2;
+     argument_vector =
+ 	(char **) malloc (argument_vector_size * sizeof (char *));
+     if (argument_vector == NULL)
+@@ -5044,6 +5044,9 @@
+        say something like "client apparently supports an option not supported
+        by this server" or something like that instead of usage message.  */
+     argument_vector[0] = "cvs server";
++    argument_vector[1] = NULL;
++      /* first, null terminate;
++       * second, serve_argument writes outside bounds if argumentvector_size<2 */
+ 
+     while (1)
+     {
+--- cvs-nserver-1.11.1.52/acl/dir-acl.c.orig	Sun Mar 31 22:23:38 2002
++++ cvs-nserver-1.11.1.52/acl/dir-acl.c	Tue Mar 11 21:01:41 2003
+@@ -102,7 +102,7 @@
+     /* reallocate if needed */
+     if (dirs_count + 1 >= dirs_allocated) {
+ 	struct DIR_ACL **new_top_dirs = 
+-	    realloc(top_dirs, dirs_allocated + ALLOC_DELTA);
++	    realloc(top_dirs, (dirs_allocated + ALLOC_DELTA) * sizeof(DIR_ACL*));
+ 
+ 	if (new_top_dirs == NULL)
+ 	    return 0;
+--- cvs-nserver-1.11.1.52/src/main.c.orig	Sun Mar 31 22:49:08 2002
++++ cvs-nserver-1.11.1.52/src/main.c	Tue Mar 11 21:11:38 2003
+@@ -922,6 +922,13 @@
+ #ifdef SERVER_SUPPORT
+ 	/* ACL-related stuff */
+ 	if (server_active) {
++	    if(!Pserver_Repos) {
++		printf("E No repository specified.\n");
++#ifdef SYSTEM_CLEANUP
++		SYSTEM_CLEANUP ();
++#endif
++		exit(EXIT_FAILURE);
++	    }
+ 	    set_repository();
+ 	    load_cvsgroups();
+ 	    load_acladmins();

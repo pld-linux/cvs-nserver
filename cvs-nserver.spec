@@ -5,7 +5,7 @@ Summary(pl):	Concurrent Versions System - nserver
 Summary(tr):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	2
+Release:	3
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
@@ -18,6 +18,8 @@ Patch3:		%{name}-cvspass.patch
 Patch4:		%{name}-home_etc.patch
 Patch5:		%{name}-ssl-link.patch
 Patch6:		%{name}-fix_doc_CVSUSER.patch
+Patch7:		%{name}-segv.patch
+Patch8:		%{name}-initgroups-rootonly.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	openssl-devel >= 0.9.7
@@ -159,6 +161,8 @@ Serwer CVS - pliki nservera.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 %build
 %{__aclocal}
@@ -305,12 +309,12 @@ fi
 %files -n cvs-nserver-pserver
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs-pserver*
-/etc/sysconfig/rc-inetd/cvs-pserver
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/cvs-pserver
 %{_mandir}/man8/cvs-pserver.8*
 
 %files -n cvs-nserver-nserver
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cvs-nserver*
 %doc NEWS.nserver FAQ.nserver
-/etc/sysconfig/rc-inetd/cvs-nserver
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/cvs-nserver
 %{_mandir}/man8/cvs-nserver.8*

@@ -1,0 +1,11 @@
+--- cvs-nserver-1.11.1.52/src/cvschkpw.c.orig	Sat Sep  8 18:30:58 2001
++++ cvs-nserver-1.11.1.52/src/cvschkpw.c	Tue Mar 11 21:21:21 2003
+@@ -223,7 +223,7 @@
+ 	}
+ 	
+ #ifdef HAVE_INITGROUPS
+-	if (initgroups(system_user, passwd->pw_gid) != 0) 
++	if (getuid()==0 && initgroups(system_user, passwd->pw_gid) != 0) 
+ 	{
+ 	    fputs(err_prefix, stderr);
+ 	    printf("cvschkpw: could not set groups for user %s: %s\n",
