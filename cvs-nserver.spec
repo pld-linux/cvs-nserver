@@ -128,7 +128,7 @@ Group:		Development/Version Control
 PreReq:		rc-inetd
 Requires:	cvs-nserver-common
 Obsoletes:	cvs-npserver
-Obsoletes:	css-pserver
+Obsoletes:	cvs-pserver
 
 %description pserver
 CVS server - pserver files.
