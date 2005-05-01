@@ -1,0 +1,4 @@
+- spec adapterized,
+- added info patch (and texinfo to BuildRequires rules),
+- move rcs2log script to %{_bindir} (added to cleint subpackage),
+- some %doc to clent subpackage added also.
