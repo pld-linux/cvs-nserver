@@ -39,7 +39,7 @@ URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	openssl-devel >= 0.9.7d
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	texinfo
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -264,42 +264,11 @@ rm -rf $RPM_BUILD_ROOT
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %pre common
-if [ -n "`/usr/bin/getgid cvs`" ]; then
-	if [ "`/usr/bin/getgid cvs`" != "52" ]; then
-		echo "Error: group cvs doesn't have gid=52. Correct this before installing cvs-nserver." 1>&2
-		exit 1
-	fi
-else
-	echo "Adding group cvs GID=52."
-	/usr/sbin/groupadd -g 52 -r cvs
-fi
-if [ -n "`/usr/bin/getgid cvsadmin`" ]; then
-	if [ "`/usr/bin/getgid cvsadmin`" != "53" ]; then
-		echo "Error: group cvsadmin doesn't have gid=53. Correct this before installing cvs-nserver." 1>&2
-		exit 1
-	fi
-else
-	echo "Adding group cvsadmin GID=53."
-	/usr/sbin/groupadd -g 53 -r cvsadmin
-fi
-if [ -n "`/bin/id -u cvs 2>/dev/null`" ]; then
-	if [ "`/bin/id -u cvs`" != "52" ]; then
-		echo "Error: user cvs doesn't have uid=52. Correct this before installing cvs-nserver." 1>&2
-		exit 1
-	fi
-else
-	echo "Adding user cvs UID=52."
-	/usr/sbin/useradd -u 52 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvs cvs 1>&2
-fi
-if [ -n "`id -u cvsadmin 2>/dev/null`" ]; then
-	if [ "`id -u cvsadmin`" != "53" ]; then
-		echo "Error: user cvsadmin doesn't have uid=53. Correct this before installing cvs-nserver." 1>&2
-		exit 1
-	fi
-else
-	echo "Adding user cvsadmin UID=53."
-	/usr/sbin/useradd -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin 1>&2
-fi
+%groupadd -P %{name}-common -g 52 -r cvs
+%groupadd -P %{name}-common -g 53 -r cvsadmin
+%useradd -P %{name}-common -u 52 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvs cvs
+%useradd -P %{name}-common -u 53 -r -d %{_cvsroot} -s /bin/false -c "CVS user" -g cvsadmin -G cvs cvsadmin
+
 if [ "$1" = 1 ]; then
 	echo "Initializing repository..."
 	%{_bindir}/cvs -d :local:%{_cvsroot} init
