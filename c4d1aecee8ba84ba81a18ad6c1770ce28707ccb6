@@ -1,0 +1,5 @@
+- massive attack:
+- separated into 4 packages
+- inetd files merged (not tested)
+- some cosmetics
+  NOTE: tests are needed
