@@ -1,6 +1,6 @@
 #
 # TODO:
-# - trigger for upgrade from old cvs - after that package stays without any 
+# - trigger for upgrade from old cvs - after that package stays without any
 #   users and nserver-common is not installed...
 Summary:	Concurrent Versions System - nserver
 Summary(de):	Concurrent-Versioning-System - nserver
@@ -315,7 +315,7 @@ fi
 
 %files common
 %defattr(644,root,root,755)
-%attr(640,root,cvs) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/cvs
+%attr(640,root,cvs) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/cvs
 %attr(4754,cvsadmin,cvs) %{_bindir}/cvspasswd
 %attr(755,root,root) %{_bindir}/cvschkpw
 %attr(755,root,root) %{_bindir}/rcs2log
@@ -328,13 +328,13 @@ fi
 
 %files pserver
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/cvs-pserver
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/cvs-pserver
 %attr(755,root,root) %{_bindir}/cvs-pserver*
 %{_mandir}/man8/cvs-pserver.8*
 
 %files nserver
 %defattr(644,root,root,755)
 %doc NEWS.nserver FAQ.nserver
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/cvs-nserver
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/cvs-nserver
 %attr(755,root,root) %{_bindir}/cvs-nserver*
 %{_mandir}/man8/cvs-nserver.8*
