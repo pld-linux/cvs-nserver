@@ -1,4 +1,3 @@
-#
 # TODO:
 # - trigger for upgrade from old cvs - after that package stays without any
 #   users and nserver-common is not installed...
@@ -39,7 +38,7 @@ URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	openssl-devel >= 0.9.7d
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	texinfo
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -123,14 +122,14 @@ Klient CVS.
 Summary:	Concurrent Versions System - common files
 Summary(pl):	Concurrent Versions System - wspólne pliki
 Group:		Development/Version Control
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	cvs-nserver-client
 Requires(pre):	fileutils
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
 Requires:	%{name}-client = %{version}-%{release}
 Provides:	group(cvs)
 Provides:	group(cvsadmin)
@@ -148,8 +147,8 @@ Wspólne pliki serwerów CVS.
 Summary:	Concurrent Versions System - pserver
 Summary(pl):	Concurrent Versions System - pserver
 Group:		Development/Version Control
-PreReq:		rc-inetd
 Requires:	%{name}-common = %{version}-%{release}
+Requires:	rc-inetd
 Obsoletes:	cvs-npserver
 Obsoletes:	cvs-pserver
 
@@ -163,8 +162,8 @@ Serwer CVS - pliki pservera.
 Summary:	Concurrent Versions System - nserver
 Summary(pl):	Concurrent Versions System - nserver
 Group:		Development/Version Control
-PreReq:		rc-inetd
 Requires:	%{name}-common = %{version}-%{release}
+Requires:	rc-inetd
 Obsoletes:	cvs-nserver
 
 %description nserver
@@ -284,24 +283,16 @@ if [ "$1" = "0" ]; then
 fi
 
 %post pserver
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd reload
-fi
+%service -q rc-inetd reload
 
 %postun pserver
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd reload
-fi
+%service -q rc-inetd reload
 
 %post nserver
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd reload
-fi
+%service -q rc-inetd reload
 
 %postun nserver
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd reload
-fi
+%service -q rc-inetd reload
 
 %files client
 %defattr(644,root,root,755)
