@@ -2,10 +2,10 @@
 # - trigger for upgrade from old cvs - after that package stays without any
 #   users and nserver-common is not installed...
 Summary:	Concurrent Versions System - nserver
-Summary(de.UTF-8):   Concurrent-Versioning-System - nserver
-Summary(fr.UTF-8):   Un système pour maintenir à jour des fichiers - nserver
-Summary(pl.UTF-8):   Concurrent Versions System - nserver
-Summary(tr.UTF-8):   Sürüm denetim sistemi - nserver
+Summary(de.UTF-8):	Concurrent-Versioning-System - nserver
+Summary(fr.UTF-8):	Un système pour maintenir à jour des fichiers - nserver
+Summary(pl.UTF-8):	Concurrent Versions System - nserver
+Summary(tr.UTF-8):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
 Release:	18
@@ -106,7 +106,7 @@ sağlar.
 
 %package client
 Summary:	Concurrent Versions System - client
-Summary(pl.UTF-8):   Concurrent Versions System - klient
+Summary(pl.UTF-8):	Concurrent Versions System - klient
 Group:		Development/Version Control
 Provides:	cvs = %{version}
 Obsoletes:	cvs
@@ -120,7 +120,7 @@ Klient CVS.
 
 %package common
 Summary:	Concurrent Versions System - common files
-Summary(pl.UTF-8):   Concurrent Versions System - wspólne pliki
+Summary(pl.UTF-8):	Concurrent Versions System - wspólne pliki
 Group:		Development/Version Control
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -145,7 +145,7 @@ Wspólne pliki serwerów CVS.
 
 %package pserver
 Summary:	Concurrent Versions System - pserver
-Summary(pl.UTF-8):   Concurrent Versions System - pserver
+Summary(pl.UTF-8):	Concurrent Versions System - pserver
 Group:		Development/Version Control
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	rc-inetd
@@ -160,7 +160,7 @@ Serwer CVS - pliki pservera.
 
 %package nserver
 Summary:	Concurrent Versions System - nserver
-Summary(pl.UTF-8):   Concurrent Versions System - nserver
+Summary(pl.UTF-8):	Concurrent Versions System - nserver
 Group:		Development/Version Control
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	rc-inetd
