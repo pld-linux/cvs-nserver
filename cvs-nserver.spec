@@ -2,10 +2,10 @@
 # - trigger for upgrade from old cvs - after that package stays without any
 #   users and nserver-common is not installed...
 Summary:	Concurrent Versions System - nserver
-Summary(de):	Concurrent-Versioning-System - nserver
-Summary(fr):	Un système pour maintenir à jour des fichiers - nserver
-Summary(pl):	Concurrent Versions System - nserver
-Summary(tr):	Sürüm denetim sistemi - nserver
+Summary(de.UTF-8):   Concurrent-Versioning-System - nserver
+Summary(fr.UTF-8):   Un systÃ¨me pour maintenir Ã  jour des fichiers - nserver
+Summary(pl.UTF-8):   Concurrent Versions System - nserver
+Summary(tr.UTF-8):   SÃ¼rÃ¼m denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
 Release:	18
@@ -56,57 +56,57 @@ and to control the concurrent editing of source files among multiple
 authors. CVS allows triggers to enable/log/control various operations
 and works well over a wide area network.
 
-%description -l de
-CVS ist ein Frontend für das RCS(1)-Revisionskontrollsystem, das den
+%description -l de.UTF-8
+CVS ist ein Frontend fÃ¼r das RCS(1)-Revisionskontrollsystem, das den
 Begriff der Revisionskontrolle von einer Sammlung von Dateien in einem
 einzelnen Verzeichnis auf eine ganze Hierarchie ausweitet, bestehend
 aus revisionskontrollierten Dateien. Diese Verzeichnisse und Dateien
 lassen sich zu einer Software-Release kombinieren. CVS bietet die
 Funktionen, die zur Verwaltung von Software-Releases und zur
-Überwachung der gleichzeitigen Bearbeitung von Quelldateien durch
+Ãœberwachung der gleichzeitigen Bearbeitung von Quelldateien durch
 mehrere Software- Entwickler notwendig sind.
 
-%description -l fr
-"CVS" signifie "Concurrent Version System". C'est un système de
+%description -l fr.UTF-8
+"CVS" signifie "Concurrent Version System". C'est un systÃ¨me de
 comparaison de versions de fichiers, qui peut garder une trace des
-changements apportés à des fichiers (le plus souvent, les fichiers des
-sources d'un programme). CVS conserve seulement les différences, et
-non l'intégralité d'un fichier récent et d'un fichier plus ancien. A
+changements apportÃ©s Ã  des fichiers (le plus souvent, les fichiers des
+sources d'un programme). CVS conserve seulement les diffÃ©rences, et
+non l'intÃ©gralitÃ© d'un fichier rÃ©cent et d'un fichier plus ancien. A
 chaque modification d'un fichier, CVS garde (entre autres) le nom de
 la personne ayant fait la modification, la raison justifiant cette
-modification, et la date à laquelle celle-ci a eu lieu. CVS est très
-utile pour gérer la mise en commun des modifications apportées par
-plusieurs personnes travaillant en parallèle sur les mêmes fichiers.
+modification, et la date Ã  laquelle celle-ci a eu lieu. CVS est trÃ¨s
+utile pour gÃ©rer la mise en commun des modifications apportÃ©es par
+plusieurs personnes travaillant en parallÃ¨le sur les mÃªmes fichiers.
 Au lieu de garder plusieurs versions des fichiers dans un seul
-répertoire, CVS crée une série de répertoires, chacun contenant une
-nouvelle version des fichiers. Ces répertoires et ces fichiers peuvent
-ensuite être regroupés pour former la version la plus à jour du
+rÃ©pertoire, CVS crÃ©e une sÃ©rie de rÃ©pertoires, chacun contenant une
+nouvelle version des fichiers. Ces rÃ©pertoires et ces fichiers peuvent
+ensuite Ãªtre regroupÃ©s pour former la version la plus Ã  jour du
 logiciel. Installez ce package si vous avez besoin d'utiliser un
-système de contrôle de version.
+systÃ¨me de contrÃ´le de version.
 
-%description -l pl
-CVS jest nak³adk± na rcs (Revision Control System, czyli w wolnym
-t³umaczeniu system kontroli wersji zasobów), który rozszerza
-mo¿liwo¶ci rcs'a z narzêdzia do kontroli zbioru plików w pojedynczym
-katalogu o mo¿liwo¶æ kontroli zbioru hierarchicznie u³o¿onych
-katalogów z plikami. Z pomoc± CVS w ³atwy sposób mo¿na zarz±dzaæ kodem
-¼ród³owym opracowywanym przez nawet bardzo du¿e zespo³y programistów
-umo¿liwiaj±c ¶ledzenie i kontrolê wszystkich zmian w trakcie pracy nad
-projektami i wypuszczaniem pe³nych wersji oprogramowania (release).
+%description -l pl.UTF-8
+CVS jest nakÅ‚adkÄ… na rcs (Revision Control System, czyli w wolnym
+tÅ‚umaczeniu system kontroli wersji zasobÃ³w), ktÃ³ry rozszerza
+moÅ¼liwoÅ›ci rcs'a z narzÄ™dzia do kontroli zbioru plikÃ³w w pojedynczym
+katalogu o moÅ¼liwoÅ›Ä‡ kontroli zbioru hierarchicznie uÅ‚oÅ¼onych
+katalogÃ³w z plikami. Z pomocÄ… CVS w Å‚atwy sposÃ³b moÅ¼na zarzÄ…dzaÄ‡ kodem
+ÅºrÃ³dÅ‚owym opracowywanym przez nawet bardzo duÅ¼e zespoÅ‚y programistÃ³w
+umoÅ¼liwiajÄ…c Å›ledzenie i kontrolÄ™ wszystkich zmian w trakcie pracy nad
+projektami i wypuszczaniem peÅ‚nych wersji oprogramowania (release).
 
-%description -l tr
+%description -l tr.UTF-8
 CVS (Concurrent Versioning System), tek bir dizindeki dosya
-topluluğunun sürüm denetimini, denetimi yapılmış dizinlerin hiyerarşik
-topluluğuna genişleten rcs(1) sürüm denetim sisteminin ön yüzüdür. Bu
-dizin ve dosyalar, bir yazılım yayını oluşturma amacıyla biraraya
-getirilebilir. CVS, bu yazılım yayınlarının yönetilmesini ve kaynak
-dosyaları bakımının birden çok yazılım geliştiricisi tarafından
-eşzamanlı olarak yapılmasını kontrol etmek için gereken işlevleri
-sağlar.
+topluluÄŸunun sÃ¼rÃ¼m denetimini, denetimi yapÄ±lmÄ±ÅŸ dizinlerin hiyerarÅŸik
+topluluÄŸuna geniÅŸleten rcs(1) sÃ¼rÃ¼m denetim sisteminin Ã¶n yÃ¼zÃ¼dÃ¼r. Bu
+dizin ve dosyalar, bir yazÄ±lÄ±m yayÄ±nÄ± oluÅŸturma amacÄ±yla biraraya
+getirilebilir. CVS, bu yazÄ±lÄ±m yayÄ±nlarÄ±nÄ±n yÃ¶netilmesini ve kaynak
+dosyalarÄ± bakÄ±mÄ±nÄ±n birden Ã§ok yazÄ±lÄ±m geliÅŸtiricisi tarafÄ±ndan
+eÅŸzamanlÄ± olarak yapÄ±lmasÄ±nÄ± kontrol etmek iÃ§in gereken iÅŸlevleri
+saÄŸlar.
 
 %package client
 Summary:	Concurrent Versions System - client
-Summary(pl):	Concurrent Versions System - klient
+Summary(pl.UTF-8):   Concurrent Versions System - klient
 Group:		Development/Version Control
 Provides:	cvs = %{version}
 Obsoletes:	cvs
@@ -115,12 +115,12 @@ Obsoletes:	cvs-npclient
 %description client
 CVS client.
 
-%description client -l pl
+%description client -l pl.UTF-8
 Klient CVS.
 
 %package common
 Summary:	Concurrent Versions System - common files
-Summary(pl):	Concurrent Versions System - wspólne pliki
+Summary(pl.UTF-8):   Concurrent Versions System - wspÃ³lne pliki
 Group:		Development/Version Control
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -140,12 +140,12 @@ Obsoletes:	cvs-nserver
 %description common
 CVS - common server files.
 
-%description common -l pl
-Wspólne pliki serwerów CVS.
+%description common -l pl.UTF-8
+WspÃ³lne pliki serwerÃ³w CVS.
 
 %package pserver
 Summary:	Concurrent Versions System - pserver
-Summary(pl):	Concurrent Versions System - pserver
+Summary(pl.UTF-8):   Concurrent Versions System - pserver
 Group:		Development/Version Control
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	rc-inetd
@@ -155,12 +155,12 @@ Obsoletes:	cvs-pserver
 %description pserver
 CVS server - pserver files.
 
-%description pserver -l pl
+%description pserver -l pl.UTF-8
 Serwer CVS - pliki pservera.
 
 %package nserver
 Summary:	Concurrent Versions System - nserver
-Summary(pl):	Concurrent Versions System - nserver
+Summary(pl.UTF-8):   Concurrent Versions System - nserver
 Group:		Development/Version Control
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	rc-inetd
@@ -169,7 +169,7 @@ Obsoletes:	cvs-nserver
 %description nserver
 CVS server - nserver files.
 
-%description nserver -l pl
+%description nserver -l pl.UTF-8
 Serwer CVS - pliki nservera.
 
 %prep
