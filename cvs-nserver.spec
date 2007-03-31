@@ -8,7 +8,7 @@ Summary(pl.UTF-8):	Concurrent Versions System - nserver
 Summary(tr.UTF-8):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	18
+Release:	19
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/cvs-nserver/%{name}-%{version}.tar.gz
@@ -37,6 +37,7 @@ Patch18:	%{name}-dblshutdown.patch
 URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	krb5-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	texinfo
@@ -204,7 +205,7 @@ Serwer CVS - pliki nservera.
 	--enable-server \
 	--enable-setuid \
 	--with-openssl \
-	--without-gssapi
+	--with-gssapi
 %{__make}
 
 %install
