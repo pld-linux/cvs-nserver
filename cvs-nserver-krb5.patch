@@ -1,0 +1,11 @@
+--- cvs-nserver-1.11.1.52/src/client.c~	2007-04-01 19:27:28.000000000 +0200
++++ cvs-nserver-1.11.1.52/src/client.c	2007-04-01 19:31:29.000000000 +0200
+@@ -460,7 +460,7 @@
+ 
+ static List *ignlist = (List *) NULL;
+ 
+-#if defined(GSSAPI_SUPPORT) || defined(KERBEROS_SUPPORT)
++#if defined(HAVE_GSSAPI) || defined(HAVE_KERBEROS)
+ /* Buffer to write to the server.  */
+ static struct buffer *to_server;
+ 
