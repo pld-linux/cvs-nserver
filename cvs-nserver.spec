@@ -8,7 +8,7 @@ Summary(pl.UTF-8):	Concurrent Versions System - nserver
 Summary(tr.UTF-8):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	19
+Release:	20
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/cvs-nserver/%{name}-%{version}.tar.gz
@@ -34,6 +34,7 @@ Patch15:	%{name}-CAN-2004-0396.patch
 Patch16:	%{name}-CAN-2004-0414.patch
 Patch17:	%{name}-CAN-2004-0416-0417-0418.patch
 Patch18:	%{name}-dblshutdown.patch
+Patch19:	%{name}-krb5.patch
 URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -194,6 +195,7 @@ Serwer CVS - pliki nservera.
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 
 %build
 %{__aclocal}
