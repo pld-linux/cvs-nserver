@@ -1,6 +1,7 @@
 # TODO:
 # - trigger for upgrade from old cvs - after that package stays without any
 #   users and nserver-common is not installed...
+# - cvschkpw causes sig11 when run without CVSSERVER variable set.
 Summary:	Concurrent Versions System - nserver
 Summary(de.UTF-8):	Concurrent-Versioning-System - nserver
 Summary(fr.UTF-8):	Un système pour maintenir à jour des fichiers - nserver
