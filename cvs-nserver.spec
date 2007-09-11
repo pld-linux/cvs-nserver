@@ -9,7 +9,7 @@ Summary(pl.UTF-8):	Concurrent Versions System - nserver
 Summary(tr.UTF-8):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	20
+Release:	21
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/cvs-nserver/%{name}-%{version}.tar.gz
@@ -228,7 +228,7 @@ if [ -f /etc/sysconfig/cvs ]; then
 	. /etc/sysconfig/cvs
 fi
 
-CVSPASSWD=%{_bindir}/cvspasswd \
+CVSPASSWD=%{_bindir}/cvspasswd CVSSERVER=pserver \
 exec %{_bindir}/cvs-pserver \$REPOSITORY -- \
 %{_bindir}/cvschkpw %{_bindir}/cvs pserver
 EOF
@@ -240,7 +240,7 @@ if [ -f /etc/sysconfig/cvs ]; then
 	. /etc/sysconfig/cvs
 fi
 
-CVSPASSWD=%{_bindir}/cvspasswd \
+CVSPASSWD=%{_bindir}/cvspasswd CVSSERVER=nserver \
 exec %{_bindir}/cvs-nserver \$REPOSITORY -- \
 %{_bindir}/cvschkpw %{_bindir}/cvs nserver
 EOF
