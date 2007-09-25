@@ -35,8 +35,7 @@ Patch15:	%{name}-CAN-2004-0396.patch
 Patch16:	%{name}-CAN-2004-0414.patch
 Patch17:	%{name}-CAN-2004-0416-0417-0418.patch
 Patch18:	%{name}-dblshutdown.patch
-Patch19:	%{name}-krb5.patch
-Patch20:	%{name}-cvspasswd-mode.patch
+Patch19:	%{name}-cvspasswd-mode.patch
 URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -198,7 +197,6 @@ Serwer CVS - pliki nservera.
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
-%patch20 -p1
 
 %build
 %{__aclocal}
@@ -210,7 +208,7 @@ Serwer CVS - pliki nservera.
 	--enable-server \
 	--enable-setuid \
 	--with-openssl \
-	--with-gssapi
+	--without-gssapi
 %{__make}
 
 %install
