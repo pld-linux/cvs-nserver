@@ -39,7 +39,6 @@ Patch19:	%{name}-cvspasswd-mode.patch
 URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	krb5-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	texinfo
