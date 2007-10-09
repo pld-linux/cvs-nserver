@@ -1,0 +1,3 @@
+- added fix_doc_CVSUSER patch which fixes environment variable name which cares
+  cvs user name which is mapped to real system account name (s/CVS_USER/CVSUSER/)
+  (was discovered during install cvs-nserver on main PLD cvs repository).
