@@ -9,7 +9,7 @@ Summary(pl.UTF-8):	Concurrent Versions System - nserver
 Summary(tr.UTF-8):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	22
+Release:	23
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/cvs-nserver/%{name}-%{version}.tar.gz
@@ -113,7 +113,7 @@ Summary:	Concurrent Versions System - client
 Summary(pl.UTF-8):	Concurrent Versions System - klient
 Group:		Development/Version Control
 Provides:	cvs = %{version}
-Obsoletes:	cvs
+Conflicts:	cvs
 Obsoletes:	cvs-npclient
 
 %description client
