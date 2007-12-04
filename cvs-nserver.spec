@@ -113,6 +113,7 @@ Summary:	Concurrent Versions System - client
 Summary(pl.UTF-8):	Concurrent Versions System - klient
 Group:		Development/Version Control
 Provides:	cvs-client = %{version}
+Obsoletes:	cvs-client
 Obsoletes:	cvs-npclient
 Conflicts:	cvs
 
