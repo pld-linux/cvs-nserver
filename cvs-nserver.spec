@@ -263,11 +263,11 @@ mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post client
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%post client	-p	/sbin/postshell
+-/usr/sbin/fix-info-dir -c %{_infodir}
 
-%postun client
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%postun client	-p	/sbin/postshell
+-/usr/sbin/fix-info-dir -c %{_infodir}
 
 %pre common
 %groupadd -P %{name}-common -g 52 -r cvs
