@@ -9,7 +9,7 @@ Summary(pl.UTF-8):	Concurrent Versions System - nserver
 Summary(tr.UTF-8):	Sürüm denetim sistemi - nserver
 Name:		cvs-nserver
 Version:	1.11.1.52
-Release:	22
+Release:	23
 License:	GPL
 Group:		Development/Version Control
 Source0:	http://dl.sourceforge.net/cvs-nserver/%{name}-%{version}.tar.gz
@@ -110,9 +110,10 @@ sağlar.
 Summary:	Concurrent Versions System - client
 Summary(pl.UTF-8):	Concurrent Versions System - klient
 Group:		Development/Version Control
-Provides:	cvs = %{version}
-Obsoletes:	cvs
+Provides:	cvs-client = %{version}
+Obsoletes:	cvs-client
 Obsoletes:	cvs-npclient
+Conflicts:	cvs
 
 %description client
 CVS client.
@@ -259,11 +260,11 @@ mv -f	$RPM_BUILD_ROOT%{_datadir}/cvs-nserver/contrib/rcs2log \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post client
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%post client	-p	/sbin/postshell
+-/usr/sbin/fix-info-dir -c %{_infodir}
 
-%postun client
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%postun client	-p	/sbin/postshell
+-/usr/sbin/fix-info-dir -c %{_infodir}
 
 %pre common
 %groupadd -P %{name}-common -g 52 -r cvs
