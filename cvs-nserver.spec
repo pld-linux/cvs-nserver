@@ -37,6 +37,7 @@ Patch17:	%{name}-CAN-2004-0416-0417-0418.patch
 Patch18:	%{name}-dblshutdown.patch
 Patch19:	%{name}-krb5.patch
 Patch20:	%{name}-cvspasswd-mode.patch
+Patch21:	%{name}-getline.patch
 URL:		http://cvs-nserver.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -200,6 +201,7 @@ Serwer CVS - pliki nservera.
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
+%patch21 -p1
 
 %build
 %{__aclocal}
