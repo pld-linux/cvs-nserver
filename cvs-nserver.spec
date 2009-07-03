@@ -212,13 +212,14 @@ Serwer CVS - pliki nservera.
 	--enable-setuid \
 	--with-openssl \
 	--with-gssapi
-%{__make}
+
+%{__make} -j1
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_cvsroot},/var/lock/cvs}
 
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/cvs-nserver
