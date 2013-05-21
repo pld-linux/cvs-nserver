@@ -21,6 +21,15 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
  # This is needed because Automake does not seem to realize there is
  # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
  AC_SUBST(M4)
+@@ -95,8 +95,6 @@
+ LIBS="-lcrypt $LIBS"
+ fi
+ 
+-AM_C_PROTOTYPES
+-
+ AM_MAINTAINER_MODE
+ 
+ AC_HEADER_DIRENT
 @@ -172,7 +172,7 @@
  
  AC_FUNC_FNMATCH
@@ -68,3 +77,24 @@ diff -urN cvs-nserver-1.11.1.4.org/doc/Makefile.am cvs-nserver-1.11.1.4/doc/Make
  
  # AUTOMAKE_OPTIONS = no-texinfo.tex
  
+diff -ur cvs-nserver-1.11.1.52.orig/acl/Makefile.am cvs-nserver-1.11.1.52/acl/Makefile.am
+--- cvs-nserver-1.11.1.52.orig/acl/Makefile.am	2002-01-19 17:33:05.000000000 +0000
++++ cvs-nserver-1.11.1.52/acl/Makefile.am	2013-05-21 10:51:44.498634651 +0000
+@@ -1,5 +1,3 @@
+-AUTOMAKE_OPTIONS = ../lib/ansi2knr
+-
+ INCLUDES = -I$(top_srcdir)/lib
+ 
+ TESTS = check_stringbuf check_user_acl \
+diff -ur cvs-nserver-1.11.1.52.orig/src/Makefile.am cvs-nserver-1.11.1.52/src/Makefile.am
+--- cvs-nserver-1.11.1.52.orig/src/Makefile.am	2013-05-21 10:19:41.000000000 +0000
++++ cvs-nserver-1.11.1.52/src/Makefile.am	2013-05-21 10:52:36.445634549 +0000
+@@ -12,8 +12,6 @@
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ 
+-AUTOMAKE_OPTIONS = ../lib/ansi2knr
+-
+ SUBDIRS = . tests
+ 
+ # $(includeopt) is CVS specific and set by configure
