@@ -1,0 +1,52 @@
+--- cvs-nserver-1.11.1.52/diff/diff3.c~	2001-05-19 14:05:15.000000000 +0200
++++ cvs-nserver-1.11.1.52/diff/diff3.c	2013-12-07 14:42:15.691191794 +0100
+@@ -1502,7 +1502,7 @@
+ 	      line = 0;
+ 	      do
+ 		{
+-		  printf_output (line_prefix);
++		  printf_output ("%s", line_prefix);
+ 		  cp = D_RELNUM (ptr, realfile, line);
+ 		  length = D_RELLEN (ptr, realfile, line);
+ 		  write_output (cp, length);
+--- cvs-nserver-1.11.1.52/src/main.c~	2013-12-07 14:07:08.000000000 +0100
++++ cvs-nserver-1.11.1.52/src/main.c	2013-12-07 14:43:33.117857900 +0100
+@@ -1290,6 +1290,6 @@
+ {
+     (void) fprintf (stderr, *cpp++, program_name, command_name);
+     for (; *cpp; cpp++)
+-	(void) fprintf (stderr, *cpp);
++	(void) fprintf (stderr, "%s", *cpp);
+     error_exit ();
+ }
+--- cvs-nserver-1.11.1.52/src/subr.c~	2013-12-07 14:07:08.000000000 +0100
++++ cvs-nserver-1.11.1.52/src/subr.c	2013-12-07 14:44:02.061191024 +0100
+@@ -46,7 +46,7 @@
+ 	char buf[80];
+ 	sprintf (buf, "out of memory; can not allocate %lu bytes",
+ 		 (unsigned long) bytes);
+-	error (1, 0, buf);
++	error (1, 0, "%s", buf);
+     }
+     return (cp);
+ }
+@@ -73,7 +73,7 @@
+ 	char buf[80];
+ 	sprintf (buf, "out of memory; can not reallocate %lu bytes",
+ 		 (unsigned long) bytes);
+-	error (1, 0, buf);
++	error (1, 0, "%s", buf);
+     }
+     return (cp);
+ }
+--- cvs-nserver-1.11.1.52/src/http_proxy-client.c~	2001-11-06 01:45:02.000000000 +0100
++++ cvs-nserver-1.11.1.52/src/http_proxy-client.c	2013-12-07 14:42:54.281191516 +0100
+@@ -230,7 +230,7 @@
+ 		}
+ 		fclose(f);
+ 		if (errstr != NULL) {
+-			error(0,errcode,errstr);
++			error(0,errcode,"%s",errstr);
+ 			return NCLI_FAILURE;
+ 		}
+ 	}

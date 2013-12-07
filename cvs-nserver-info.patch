@@ -28,3 +28,15 @@
  @end format
  @end ifinfo
  
+@@ -87,9 +87,9 @@
+ @sp 4
+ @comment The title is printed in a large font.
+ @center @titlefont{Version Management}
+-@sp
++@sp 1
+ @center @titlefont{with}
+-@sp
++@sp 1
+ @center @titlefont{CVS}
+ @sp 2
+ @center for @sc{cvs} @value{CVSVN}
