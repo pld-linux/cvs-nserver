@@ -1,0 +1,11 @@
+--- cvs-nserver-1.11.1.52/src/ssl-client.c~	2001-10-13 19:37:30.000000000 +0200
++++ cvs-nserver-1.11.1.52/src/ssl-client.c	2018-09-20 10:28:49.572280092 +0200
+@@ -90,7 +90,7 @@ ssl_connect (NCLI ncli)
+     char *str;
+     long x509_err;
+ 
+-    ctx = SSL_CTX_new(SSLv3_client_method());
++    ctx = SSL_CTX_new(SSLv23_client_method());
+ 
+     SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, NULL);
+ 
