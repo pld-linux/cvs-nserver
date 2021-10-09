@@ -1,7 +1,16 @@
-diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configure.in
---- cvs-nserver-1.11.1.52.orig/configure.in	Sun May 19 11:06:44 2002
-+++ cvs-nserver-1.11.1.52/configure.in	Sun May 19 11:10:49 2002
-@@ -10,7 +10,6 @@
+diff -urNp -x '*.orig' cvs-nserver-1.11.1.52.org/acl/Makefile.am cvs-nserver-1.11.1.52/acl/Makefile.am
+--- cvs-nserver-1.11.1.52.org/acl/Makefile.am	2002-01-19 18:33:05.000000000 +0100
++++ cvs-nserver-1.11.1.52/acl/Makefile.am	2021-10-09 23:42:06.967727032 +0200
+@@ -1,5 +1,3 @@
+-AUTOMAKE_OPTIONS = ../lib/ansi2knr
+-
+ INCLUDES = -I$(top_srcdir)/lib
+ 
+ TESTS = check_stringbuf check_user_acl \
+diff -urNp -x '*.orig' cvs-nserver-1.11.1.52.org/configure.in cvs-nserver-1.11.1.52/configure.in
+--- cvs-nserver-1.11.1.52.org/configure.in	2002-02-10 00:26:03.000000000 +0100
++++ cvs-nserver-1.11.1.52/configure.in	2021-10-09 23:42:06.967727032 +0200
+@@ -10,7 +10,6 @@ AM_CONFIG_HEADER(config.h src/options.h)
  # initialize test framework
  AC_CONFIG_TESTDIR(tests)
  AC_CONFIG_FILES([tests/Makefile \
@@ -9,7 +18,7 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
                   tests/package.m4 \
                   tests/cvs:tests/wrapsh.in],
                  [chmod +x tests/cvs])
-@@ -22,10 +21,7 @@
+@@ -22,10 +21,7 @@ AC_PATH_PROG(EXPR, expr)
  # their path, the installer can configure with a path that has GNU m4
  # first and get that path embedded in the installed autoconf and
  # autoheader scripts.
@@ -21,7 +30,7 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
  # This is needed because Automake does not seem to realize there is
  # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
  AC_SUBST(M4)
-@@ -95,8 +95,6 @@
+@@ -99,8 +95,6 @@ CFLAGS="$CFLAGS -D_SYSV3"
  LIBS="-lcrypt $LIBS"
  fi
  
@@ -30,7 +39,7 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
  AM_MAINTAINER_MODE
  
  AC_HEADER_DIRENT
-@@ -172,7 +172,7 @@
+@@ -201,7 +195,7 @@ AC_SYS_LONG_FILE_NAMES
  
  AC_FUNC_FNMATCH
  if test "$ac_cv_func_fnmatch_works" = no; then
@@ -39,16 +48,16 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
  fi
  
  # Try to find connect and gethostbyname.
-@@ -277,7 +277,7 @@
+@@ -315,7 +309,7 @@ if test "$encryption" = "true"; then
    AC_DEFINE(ENCRYPTION)
  fi
  
 -AC_CHECK_FUNC(gethostname, :, LIBOBJS="$LIBOBJS hostname.o")
 +AC_CHECK_FUNC(gethostname, :, [AC_LIBOBJ([hostname])])
  
- # Check for options requesting client and server feature. If none are
- # given and we have connect(), we want the full client & server arrangement.
-@@ -361,7 +361,7 @@
+ #
+ # use --with-openssl to turn on support for OpenSSL
+@@ -428,7 +422,7 @@ AC_CACHE_CHECK(for cygwin32, ccvs_cv_sys
  [AC_TRY_COMPILE([], [return __CYGWIN32__;],
  ccvs_cv_sys_cygwin32=yes, ccvs_cv_sys_cygwin32=no)])
  if test $ccvs_cv_sys_cygwin32 = yes; then
@@ -57,7 +66,7 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
    LIBS="$LIBS -ladvapi32"
  
    dnl On Windows you can only change file times if you can write to
-@@ -453,7 +453,6 @@
+@@ -457,7 +451,6 @@ AC_CONFIG_FILES([Makefile \
  	  lib/Makefile \
  	  man/Makefile \
  	  os2/Makefile \
@@ -65,9 +74,9 @@ diff -urN cvs-nserver-1.11.1.52.orig/configure.in cvs-nserver-1.11.1.52/configur
  	  src/Makefile \
            src/tests/Makefile \
  	  tools/Makefile \
-diff -urN cvs-nserver-1.11.1.4.org/doc/Makefile.am cvs-nserver-1.11.1.4/doc/Makefile.am
---- cvs-nserver-1.11.1.4.org/doc/Makefile.am	Sun May 19 11:06:44 2002
-+++ cvs-nserver-1.11.1.4/doc/Makefile.am	Sun May 19 11:13:13 2002
+diff -urNp -x '*.orig' cvs-nserver-1.11.1.52.org/doc/Makefile.am cvs-nserver-1.11.1.52/doc/Makefile.am
+--- cvs-nserver-1.11.1.52.org/doc/Makefile.am	2001-10-13 19:47:03.000000000 +0200
++++ cvs-nserver-1.11.1.52/doc/Makefile.am	2021-10-09 23:42:06.967727032 +0200
 @@ -14,7 +14,7 @@
  
  #DISTFILES = \
@@ -77,18 +86,9 @@ diff -urN cvs-nserver-1.11.1.4.org/doc/Makefile.am cvs-nserver-1.11.1.4/doc/Make
  
  # AUTOMAKE_OPTIONS = no-texinfo.tex
  
-diff -ur cvs-nserver-1.11.1.52.orig/acl/Makefile.am cvs-nserver-1.11.1.52/acl/Makefile.am
---- cvs-nserver-1.11.1.52.orig/acl/Makefile.am	2002-01-19 17:33:05.000000000 +0000
-+++ cvs-nserver-1.11.1.52/acl/Makefile.am	2013-05-21 10:51:44.498634651 +0000
-@@ -1,5 +1,3 @@
--AUTOMAKE_OPTIONS = ../lib/ansi2knr
--
- INCLUDES = -I$(top_srcdir)/lib
- 
- TESTS = check_stringbuf check_user_acl \
-diff -ur cvs-nserver-1.11.1.52.orig/src/Makefile.am cvs-nserver-1.11.1.52/src/Makefile.am
---- cvs-nserver-1.11.1.52.orig/src/Makefile.am	2013-05-21 10:19:41.000000000 +0000
-+++ cvs-nserver-1.11.1.52/src/Makefile.am	2013-05-21 10:52:36.445634549 +0000
+diff -urNp -x '*.orig' cvs-nserver-1.11.1.52.org/src/Makefile.am cvs-nserver-1.11.1.52/src/Makefile.am
+--- cvs-nserver-1.11.1.52.org/src/Makefile.am	2021-10-09 23:42:06.901060450 +0200
++++ cvs-nserver-1.11.1.52/src/Makefile.am	2021-10-09 23:42:06.967727032 +0200
 @@ -12,8 +12,6 @@
  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  # GNU General Public License for more details.

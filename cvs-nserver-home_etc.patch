@@ -1,64 +1,6 @@
---- cvs-1.11.1p1.org/src/login.c	Thu Sep  6 18:18:29 2001
-+++ cvs-1.11.1p1/src/login.c	Wed Dec 11 15:19:42 2002
-@@ -7,6 +7,7 @@
-  * Allow user to log in for an authenticating server.
-  */
- 
-+#include <sys/stat.h>
- #include "cvs.h"
- #include "getline.h"
- 
-@@ -30,7 +31,7 @@
- #endif
- 
- #ifndef CVS_PASSWORD_FILE 
--#define CVS_PASSWORD_FILE ".cvspass"
-+#define CVS_PASSWORD_FILE "cvspass"
- #endif
- 
- /* If non-NULL, get_cvs_password() will just return this. */
-@@ -44,6 +45,8 @@
- {
-     char *homedir;
-     char *passfile;
-+    char *path;
-+    struct stat st;
- 
-     /* Environment should override file. */
-     if ((passfile = getenv ("CVS_PASSFILE")) != NULL)
-@@ -65,8 +68,17 @@
- 	return (char *) NULL;
-     }
- 
-+    if ( (path=getenv("CONFIG_DIR")) && path[0] ) {
-+	path=(char*) malloc(strlen(homedir)+strlen(getenv("CONFIG_DIR"))+2);
-+	sprintf(path, "%s/%s", homedir, getenv("CONFIG_DIR"));
-+    } else path=(char *) NULL;
-+    if ( path && stat(path,&st)!=-1 && S_ISDIR(st.st_mode) ) {
-+	passfile = (char *) xmalloc (strlen (path) + strlen (CVS_PASSWORD_FILE) + 3);
-+	sprintf (passfile, "%s/%s", path, CVS_PASSWORD_FILE);
-+    }
-+    else {
-     passfile =
--	(char *) xmalloc (strlen (homedir) + strlen (CVS_PASSWORD_FILE) + 3);
-+        (char *) xmalloc (strlen (homedir) + strlen (CVS_PASSWORD_FILE) + 4);
-     strcpy (passfile, homedir);
- #ifndef NO_SLASH_AFTER_HOME
-     /* NO_SLASH_AFTER_HOME is defined for VMS, where foo:[bar]/.cvspass is not
-@@ -75,7 +87,11 @@
-        kind of thing....  */
-     strcat (passfile, "/");
- #endif
-+    strcat (passfile, ".");
-     strcat (passfile, CVS_PASSWORD_FILE);
-+    } /* else */
-+    if (path)
-+	    free(path);
- 
-     /* Safety first and last, Scouts. */
-     if (isfile (passfile))
---- cvs-1.11.1p1.org/src/cvsrc.c	Sun Dec 22 14:18:41 2002
-+++ cvs-1.11.1p1/src/cvsrc.c	Sun Dec 22 14:30:43 2002
+diff -urNp -x '*.orig' cvs-nserver-1.11.1.52.org/src/cvsrc.c cvs-nserver-1.11.1.52/src/cvsrc.c
+--- cvs-nserver-1.11.1.52.org/src/cvsrc.c	2001-05-26 14:43:51.000000000 +0200
++++ cvs-nserver-1.11.1.52/src/cvsrc.c	2021-10-09 23:42:07.291059953 +0200
 @@ -9,13 +9,14 @@
   */
  
@@ -75,7 +17,7 @@
  #endif
  char cvsrc[] = CVSRC_FILENAME;
  
-@@ -36,6 +37,9 @@
+@@ -36,6 +37,9 @@ read_cvsrc (argc, argv, cmdname)
      char *homeinit;
      FILE *cvsrcfile;
  
@@ -85,7 +27,7 @@
      char *line;
      int line_length;
      size_t line_chars_allocated;
-@@ -73,10 +77,22 @@
+@@ -80,10 +84,22 @@ read_cvsrc (argc, argv, cmdname)
      if (!homedir)
  	return;
  
@@ -108,3 +50,63 @@
  
      /* if it can't be read, there's no point to continuing */
  
+diff -urNp -x '*.orig' cvs-nserver-1.11.1.52.org/src/login.c cvs-nserver-1.11.1.52/src/login.c
+--- cvs-nserver-1.11.1.52.org/src/login.c	2021-10-09 23:42:07.224393371 +0200
++++ cvs-nserver-1.11.1.52/src/login.c	2021-10-09 23:42:07.291059953 +0200
+@@ -10,6 +10,7 @@
+ 
+ #include "config.h"
+ 
++#include <sys/stat.h>
+ #include "cvs.h"
+ #include "login.h"
+ #include "getline.h"
+@@ -36,7 +37,7 @@ extern char *GETPASS ();
+ #endif
+ 
+ #ifndef CVS_PASSWORD_FILE 
+-#define CVS_PASSWORD_FILE ".cvspass"
++#define CVS_PASSWORD_FILE "cvspass"
+ #endif
+ 
+ /* If non-NULL, get_cvs_password() will just return this. */
+@@ -50,6 +51,8 @@ construct_cvspass_filename ()
+ {
+     char *homedir;
+     char *passfile;
++    char *path;
++    struct stat st;
+ 
+     /* Environment should override file. */
+     if ((passfile = getenv ("CVS_PASSFILE")) != NULL)
+@@ -71,8 +74,17 @@ construct_cvspass_filename ()
+ 	return (char *) NULL;
+     }
+ 
++    if ( (path=getenv("CONFIG_DIR")) && path[0] ) {
++	path=(char*) malloc(strlen(homedir)+strlen(getenv("CONFIG_DIR"))+2);
++	sprintf(path, "%s/%s", homedir, getenv("CONFIG_DIR"));
++    } else path=(char *) NULL;
++    if ( path && stat(path,&st)!=-1 && S_ISDIR(st.st_mode) ) {
++	passfile = (char *) xmalloc (strlen (path) + strlen (CVS_PASSWORD_FILE) + 3);
++	sprintf (passfile, "%s/%s", path, CVS_PASSWORD_FILE);
++    }
++    else {
+     passfile =
+-	(char *) xmalloc (strlen (homedir) + strlen (CVS_PASSWORD_FILE) + 3);
++        (char *) xmalloc (strlen (homedir) + strlen (CVS_PASSWORD_FILE) + 4);
+     strcpy (passfile, homedir);
+ #ifndef NO_SLASH_AFTER_HOME
+     /* NO_SLASH_AFTER_HOME is defined for VMS, where foo:[bar]/.cvspass is not
+@@ -81,7 +93,11 @@ construct_cvspass_filename ()
+        kind of thing....  */
+     strcat (passfile, "/");
+ #endif
++    strcat (passfile, ".");
+     strcat (passfile, CVS_PASSWORD_FILE);
++    } /* else */
++    if (path)
++	    free(path);
+ 
+     /* Safety first and last, Scouts. */
+     if (isfile (passfile))
